@@ -38,4 +38,15 @@ class GoogleDriver
     {
         return (new SearchQuery($this->apiKey))->search($term);
     }
+
+    /**
+     * 
+     * 
+     * @param   
+     * @return  
+     */
+    public function retrieve($id)
+    {
+        return (new RetrieveQuery($this->apiKey))($id);
+    }
 }
