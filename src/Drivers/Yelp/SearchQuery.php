@@ -4,18 +4,19 @@ namespace TeamZac\POI\Drivers\Yelp;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
-use TeamZac\POI\Support\Place;
-use TeamZac\POI\Support\LatLng;
 use TeamZac\POI\Support\Address;
 use TeamZac\POI\Support\PlaceCollection;
+use TeamZac\POI\Contracts\SearchQueryInterface;
 
-class SearchQuery
+class SearchQuery implements SearchQueryInterface
 {
+    use MapsYelpResults;
+
+    /** @var GuzzleHttp\Client */
+    protected $client;
+
     /** @var string */
     protected $endpointUrl = 'https://api.yelp.com/v3/businesses/search';
-
-    /** @var string */
-    protected $apiKey;
 
     /** @var array */
     protected $query = [
@@ -27,22 +28,19 @@ class SearchQuery
     /**
      * Construct the query
      * 
-     * @param   array $key
+     * @param   GuzzleHttp\Client $client
      */
-    public function __construct($key)
+    public function __construct($client)
     {
-        $this->apiKey = $key;
+        $this->client = $client;
     }
     
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
-    public function search($searchTerm)
+    public function search($term = null)
     {
-        $this->query['term'] = $searchTerm;
+        $this->query['term'] = $term;
 
         return $this;
     }
@@ -61,18 +59,23 @@ class SearchQuery
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
-    public function near($address)
+    public function near(Address $address)
     {
         $this->query = array_merge([
             'latitude' => $address->latLng->getLat(),
             'longitude' => $address->latLng->getLng(),
         ], $this->query);
 
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function within($geometry)
+    {
         return $this;
     }
 
@@ -99,26 +102,11 @@ class SearchQuery
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
     public function get()
     {
-        $client = new Client([
-            'base_uri' => $this->endpointUrl,
-            'timeout'  => 10.0,
-            'stream' => false,
-            'headers' => [
-                'Authorization' => 'Bearer ' . $this->apiKey,
-            ]
-        ]);
-
-        $response = $client->get('', [
-            'headers' => [
-                'Accept'     => 'application/json',
-            ],
+        $response = $this->client->get($this->endpointUrl, [
             'query' => $this->buildQueryString(),
         ]);
 
@@ -175,40 +163,7 @@ class SearchQuery
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
-     */
-    public function mapResultToPlace($result)
-    {
-        return (new Place)->setRaw($result)->map([
-            'provider' => 'yelp',
-            'id' => Arr::get($result, 'id'),
-            'name' => Arr::get($result, 'name'),
-            'address' => new Address([
-                'street' => Arr::get($result, 'location.address1'),
-                'city' => Arr::get($result, 'location.city'),
-                'state' => Arr::get($result, 'location.state'),
-                'postalCode' => Arr::get($result, 'location.zip_code'),
-                'country' => Arr::get($result, 'location.country'),
-                'formatted' => implode(', ', Arr::get($result, 'location.display_address')),
-                'latLng' => new LatLng(
-                    Arr::get($result, 'coordinates.latitude'), Arr::get($result, 'coordinates.longitude')
-                ),
-            ]),
-            'phone' => Arr::get($result, 'display_phone'),
-            'categories' => collect(Arr::get($result, 'categories', []))->map(function($category) {
-                return $category['alias'];
-            })->toArray(),
-        ]);
-    }
-
-    /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
     public function fromCursor($cursor)
     {

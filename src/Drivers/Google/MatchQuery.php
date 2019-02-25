@@ -2,14 +2,20 @@
 
 namespace TeamZac\POI\Drivers\Google;
 
-use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
 use TeamZac\POI\Support\Place;
 use TeamZac\POI\Support\LatLng;
 use TeamZac\POI\Support\Address;
+use TeamZac\POI\Contracts\MatchQueryInterface;
+use TeamZac\POI\Exceptions\InsufficientAddressException;
 
-class MatchQuery
+class MatchQuery implements MatchQueryInterface
 {
+    use MapsGoogleResults;
+
+    /** @var GuzzleHttp\Client */
+    protected $client;
+
     /** @var array */
     protected $query = [
         'inputtype' => 'textquery',
@@ -21,36 +27,31 @@ class MatchQuery
      * 
      * @param   array $key
      */
-    public function __construct($key)
+    public function __construct($client, $key)
     {
+        $this->client = $client;
         $this->query['key'] = $key;
     }
     
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
-    public function search($searchTerm)
+    public function search($term = null)
     {
-        if (is_numeric($searchTerm)) {
-            return $this->phone($searchTerm);
+        if (is_numeric($term)) {
+            return $this->phone($term);
         }
 
-        $this->query['input'] = $searchTerm;
+        $this->query['input'] = $term;
         $this->query['inputtype'] = 'textquery';
 
         return $this;
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
-    public function phone($phone)
+    public function phone($phone = null)
     {
         $this->query['input'] = $phone;
         $this->query['inputtype'] = 'phonenumber';
@@ -59,35 +60,33 @@ class MatchQuery
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
-    public function near($address)
+    public function near(Address $address)
     {
+        if (!$address->hasLatLng()) {
+            throw new InsufficientAddressException('Google requires a lat/lng pair for this query');
+        }
+
         $this->query['locationbias'] = sprintf('point:%s,%s', $address->latLng->getLat(), $address->latLng->getLng());
 
         return $this;
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
+     */
+    public function within($geometry)
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function get()
     {
-        $client = new Client([
-            'base_uri' => 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json',
-            'timeout'  => 10.0,
-            'stream' => false,
-        ]);
-
-        $queryString =  http_build_query($this->query);
-
-        $response = $client->get('', [
+        $response = $this->client->get('findplacefromtext/json', [
             'headers' => [
                 'Accept'     => 'application/json',
             ],
@@ -102,27 +101,5 @@ class MatchQuery
         $json = json_decode($response->getBody()->getContents(), true);
 
         return $this->mapResultToPlace(Arr::get($json, 'candidates', [])[0]);
-    }
-
-    /**
-     * 
-     * 
-     * @param   
-     * @return  
-     */
-    public function mapResultToPlace($result)
-    {
-        return (new Place)->setRaw($result)->map([
-            'provider' => 'google',
-            'id' => Arr::get($result, 'place_id'),
-            'name' => Arr::get($result, 'name'),
-            'address' => new Address([
-                'formatted' => Arr::get($result, 'formatted_address'),
-                'latLng' => new LatLng(
-                    Arr::get($result, 'geometry.location.lat'), Arr::get($result, 'geometry.location.lng')
-                ),
-            ]),
-            'categories' => Arr::get($result, 'types', [])
-        ]);
     }
 }

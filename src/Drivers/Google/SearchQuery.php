@@ -2,15 +2,18 @@
 
 namespace TeamZac\POI\Drivers\Google;
 
-use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
-use TeamZac\POI\Support\Place;
-use TeamZac\POI\Support\LatLng;
 use TeamZac\POI\Support\Address;
 use TeamZac\POI\Support\PlaceCollection;
+use TeamZac\POI\Contracts\SearchQueryInterface;
 
-class SearchQuery
+class SearchQuery implements SearchQueryInterface
 {
+    use MapsGoogleResults;
+    
+    /** @var GuzzleHttp\Client */
+    protected $client;
+
     /** @var array */
     protected $query = [
         'fields' => 'id,name,place_id,formatted_address,permanently_closed,photos,types',
@@ -21,31 +24,26 @@ class SearchQuery
      * 
      * @param   array $key
      */
-    public function __construct($key)
+    public function __construct($client, $key)
     {
+        $this->client = $client;
         $this->query['key'] = $key;
     }
     
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
-    public function search($searchTerm = null)
+    public function search($term = null)
     {
-        $this->query['keyword'] = $searchTerm;
+        $this->query['keyword'] = $term;
 
         return $this;
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
-    public function near($address)
+    public function near(Address $address)
     {
         $this->query['location'] = sprintf('%s,%s', $address->latLng->getLat(), $address->latLng->getLng());
         $this->query['rankby'] = 'distance';
@@ -54,12 +52,9 @@ class SearchQuery
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
-    public function within($meters)
+    public function radius($meters)
     {
         $this->query['radius'] = $meters;
         $this->query['rankby'] = 'prominence';
@@ -68,22 +63,19 @@ class SearchQuery
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
+     */
+    public function within($geometry)
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function get()
     {
-        $client = new Client([
-            'base_uri' => 'https://maps.googleapis.com/maps/api/place/nearbysearch/json',
-            'timeout'  => 10.0,
-            'stream' => false,
-        ]);
-
-        $queryString =  http_build_query($this->query);
-
-        $response = $client->get('', [
+        $response = $this->client->get('nearbysearch/json', [
             'headers' => [
                 'Accept'     => 'application/json',
             ],
@@ -103,10 +95,10 @@ class SearchQuery
     }
 
     /**
+     * Map all of the results to Place objects
      * 
-     * 
-     * @param   
-     * @return  
+     * @param   array $results
+     * @return  Collection
      */
     public function mapResults($results)
     {
@@ -116,32 +108,7 @@ class SearchQuery
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
-     */
-    public function mapResultToPlace($result)
-    {
-        return (new Place)->setRaw($result)->map([
-            'provider' => 'google',
-            'id' => Arr::get($result, 'place_id'),
-            'name' => Arr::get($result, 'name'),
-            'address' => new Address([
-                'formatted' => Arr::get($result, 'formatted_address'),
-                'latLng' => new LatLng(
-                    Arr::get($result, 'geometry.location.lat'), Arr::get($result, 'geometry.location.lng')
-                ),
-            ]),
-            'categories' => Arr::get($result, 'types', [])
-        ]);
-    }
-
-    /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
     public function fromCursor($cursor)
     {

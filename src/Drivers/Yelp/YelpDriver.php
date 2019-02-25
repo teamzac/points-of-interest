@@ -2,7 +2,10 @@
 
 namespace TeamZac\POI\Drivers\Yelp;
 
-class YelpDriver 
+use GuzzleHttp\Client;
+use TeamZac\POI\Contracts\ProviderInterface;
+
+class YelpDriver implements ProviderInterface
 {
     /** @var string */
     protected $apiKey;
@@ -18,24 +21,39 @@ class YelpDriver
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
     public function match($term = null)
     {
-        return (new MatchQuery($this->apiKey))->search($term);
+        return (new MatchQuery($this->yelpClient()))->search($term);
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
     public function search($term = null)
     {
-        return (new SearchQuery($this->apiKey))->search($term);
+        return (new SearchQuery($this->yelpClient()))->search($term);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function retrieve($id) 
+    {
+        return (new RetrieveQuery($this->yelpClient()))->get($id);
+    }
+
+    protected function yelpClient() 
+    {
+        return new Client([
+            'base_uri' => 'https://api.yelp.com/v3/businesses/',
+            'timeout'  => 10.0,
+            'stream' => false,
+            'headers' => [
+                'Authorization' => 'Bearer ' . $this->apiKey,
+                'accept' => 'application/json',
+            ]
+        ]);
     }
 }

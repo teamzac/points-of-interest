@@ -2,16 +2,19 @@
 
 namespace TeamZac\POI\Drivers\Yelp;
 
-use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
 use TeamZac\POI\Support\Place;
 use TeamZac\POI\Support\LatLng;
 use TeamZac\POI\Support\Address;
+use TeamZac\POI\Contracts\MatchQueryInterface;
+use TeamZac\POI\Exceptions\InsufficientAddressException;
 
-class MatchQuery
+class MatchQuery implements MatchQueryInterface
 {
-    /** @var string */
-    protected $apiKey;
+    use MapsYelpResults;
+
+    /** @var GuzzleHttp\Client */
+    protected $client;
 
     /** @var array */
     protected $query = [];
@@ -19,33 +22,27 @@ class MatchQuery
     /**
      * Construct the query
      * 
-     * @param   array $key
+     * @param   $client
      */
-    public function __construct($key)
+    public function __construct($client)
     {
-        $this->apiKey = $key;
+        $this->client = $client;
     }
     
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
-    public function search($searchTerm)
+    public function search($term = null)
     {
-        $this->query['name'] = $searchTerm;
+        $this->query['name'] = $term;
 
         return $this;
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
-    public function phone($phone)
+    public function phone($phone = null)
     {
         $this->query['input'] = $phone;
         $this->query['inputtype'] = 'phonenumber';
@@ -54,13 +51,14 @@ class MatchQuery
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
-    public function near($address)
+    public function near(Address $address)
     {
+        if ( !$address->validate(['street', 'city', 'state', 'country', 'postalCode']) ) {
+            throw new InsufficientAddressException('Yelp requires a street, city, state, country, and postal code for this query');
+        }
+
         $this->query = array_merge([
             'address1' => $address->street,
             'city' => $address->city,
@@ -73,25 +71,19 @@ class MatchQuery
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
+     */
+    public function within($geometry)
+    {
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function get()
     {
-        $client = new Client([
-            'base_uri' => 'https://api.yelp.com/v3/businesses/matches',
-            'timeout'  => 10.0,
-            'stream' => false,
-            'headers' => [
-                'Authorization' => 'Bearer ' . $this->apiKey,
-            ]
-        ]);
-
-        $queryString =  http_build_query($this->query);
-
-        $response = $client->get('', [
+        $response = $this->client->get('matches', [
             'headers' => [
                 'Accept'     => 'application/json',
             ],
@@ -106,32 +98,5 @@ class MatchQuery
         $json = json_decode($response->getBody()->getContents(), true);
 
         return $this->mapResultToPlace($json['businesses'][0]);
-    }
-
-    /**
-     * 
-     * 
-     * @param   
-     * @return  
-     */
-    public function mapResultToPlace($result)
-    {
-        return (new Place)->setRaw($result)->map([
-            'provider' => 'yelp',
-            'id' => Arr::get($result, 'id'),
-            'name' => Arr::get($result, 'name'),
-            'address' => new Address([
-                'street' => Arr::get($result, 'location.address1'),
-                'city' => Arr::get($result, 'location.city'),
-                'state' => Arr::get($result, 'location.state'),
-                'postalCode' => Arr::get($result, 'location.zip_code'),
-                'country' => Arr::get($result, 'location.country'),
-                'formatted' => implode(', ', Arr::get($result, 'location.display_address')),
-                'latLng' => new LatLng(
-                    Arr::get($result, 'coordinates.latitude'), Arr::get($result, 'coordinates.longitude')
-                ),
-            ]),
-            'phone' => Arr::get($result, 'display_phone')
-        ]);
     }
 }
