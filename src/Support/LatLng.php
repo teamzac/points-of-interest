@@ -16,6 +16,11 @@ class LatLng
         $this->lng = $lng;
     }
 
+    public static function make($lat, $lng) 
+    {
+        return new static($lat, $lng);
+    }
+
     /**
      * 
      * 

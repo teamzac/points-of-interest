@@ -12,6 +12,11 @@ class Address
         $this->attributes = $attributes;
     }
 
+    public static function make($attributes = []) 
+    {
+        return new static($attributes);
+    }
+
     /**
      * 
      * 
