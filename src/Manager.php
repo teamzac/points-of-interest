@@ -27,6 +27,16 @@ class Manager extends BaseManager
     }
 
     /**
+     * Create an instance of the specified driver
+     * 
+     * @return  HereDriver
+     */
+    protected function createHereDriver()
+    {
+        return new Drivers\Here\HereDriver($this->app['config']['points-of-interest.connections.here']);
+    }
+
+    /**
      * Get the default driver name.
      * 
      * @return  string

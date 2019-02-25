@@ -42,4 +42,15 @@ class LatLng
     {
         return $this->lng;
     }
+
+    /**
+     * 
+     * 
+     * @param   
+     * @return  
+     */
+    public function getDescription()
+    {
+        return sprintf('%s,%s', $this->lat, $this->lng);
+    }
 }
