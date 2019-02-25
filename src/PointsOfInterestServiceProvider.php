@@ -1,6 +1,6 @@
 <?php
 
-namespace Teamzac\PointsOfInterest;
+namespace TeamZac\POI;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -54,7 +54,7 @@ class PointsOfInterestServiceProvider extends ServiceProvider
 
         // Register the main class to use with the facade
         $this->app->singleton('poi', function () {
-            return new Manager;
+            return new Manager($this->app);
         });
     }
 }

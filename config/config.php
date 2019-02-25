@@ -1,8 +1,19 @@
 <?php
 
-/*
- * You can place your custom package configuration in here.
- */
 return [
+    'default' => 'google',
 
+    'connections' => [
+        'google' => [
+            'key' => env('GOOGLE_API_KEY'),
+        ],
+
+        'yelp' => [
+
+        ],
+
+        'here' => [
+
+        ]
+    ]
 ];

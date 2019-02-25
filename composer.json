@@ -17,6 +17,7 @@
     ],
     "require": {
         "php": "^7.1",
+        "guzzlehttp/guzzle": "~6.0",
         "illuminate/support": "5.7.*"
     },
     "require-dev": {
@@ -25,12 +26,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Teamzac\\POI\\": "src"
+            "TeamZac\\POI\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Teamzac\\POI\\Tests\\": "tests"
+            "TeamZac\\POI\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -44,10 +45,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Teamzac\\POI\\PointsOfInterestServiceProvider"
+                "TeamZac\\POI\\PointsOfInterestServiceProvider"
             ],
             "aliases": {
-                "POI": "Teamzac\\POI\\Facades\\POI"
+                "POI": "TeamZac\\POI\\Facades\\POI"
             }
         }
     }

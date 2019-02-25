@@ -1,14 +1,28 @@
 <?php
 
-namespace Teamzac\POI;
+namespace TeamZac\POI;
 
 use Illuminate\Support\Manager as BaseManager;
 
 class Manager extends BaseManager
 {
-    // Build your next great package.
-    public function test() 
+    /**
+     * Create an instance of the specified driver
+     * 
+     * @return  GoogleDriver
+     */
+    protected function createGoogleDriver()
     {
-        echo 'test';
+        return new Drivers\Google\GoogleDriver($this->app['config']['points-of-interest.connections.google']);
+    }
+
+    /**
+     * Get the default driver name.
+     * 
+     * @return  string
+     */
+    public function getDefaultDriver()
+    {
+        return $this->app['config']['points-of-interest.default'];
     }
 }

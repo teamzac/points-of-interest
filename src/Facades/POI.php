@@ -15,6 +15,6 @@ class POI extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return Manager::class;
+        return 'poi';
     }
 }
