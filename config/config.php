@@ -9,7 +9,7 @@ return [
         ],
 
         'yelp' => [
-
+            'key' => env('YELP_API_KEY'),
         ],
 
         'here' => [

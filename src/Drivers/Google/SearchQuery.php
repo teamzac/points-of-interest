@@ -7,13 +7,13 @@ use Illuminate\Support\Arr;
 use TeamZac\POI\Support\Place;
 use TeamZac\POI\Support\LatLng;
 use TeamZac\POI\Support\Address;
+use TeamZac\POI\Support\PlaceCollection;
 
-class MatchQuery
+class SearchQuery
 {
     /** @var array */
     protected $query = [
-        'inputtype' => 'textquery',
-        'fields' => 'id,name,place_id,geometry/location,formatted_address,permanently_closed,photos,types',
+        'fields' => 'id,name,place_id,formatted_address,permanently_closed,photos,types',
     ];
 
     /**
@@ -32,28 +32,9 @@ class MatchQuery
      * @param   
      * @return  
      */
-    public function search($searchTerm)
+    public function search($searchTerm = null)
     {
-        if (is_numeric($searchTerm)) {
-            return $this->phone($searchTerm);
-        }
-
-        $this->query['input'] = $searchTerm;
-        $this->query['inputtype'] = 'textquery';
-
-        return $this;
-    }
-
-    /**
-     * 
-     * 
-     * @param   
-     * @return  
-     */
-    public function phone($phone)
-    {
-        $this->query['input'] = $phone;
-        $this->query['inputtype'] = 'phonenumber';
+        $this->query['keyword'] = $searchTerm;
 
         return $this;
     }
@@ -66,7 +47,22 @@ class MatchQuery
      */
     public function near($address)
     {
-        $this->query['locationbias'] = sprintf('point:%s,%s', $address->latLng->getLat(), $address->latLng->getLng());
+        $this->query['location'] = sprintf('%s,%s', $address->latLng->getLat(), $address->latLng->getLng());
+        $this->query['rankby'] = 'distance';
+
+        return $this;
+    }
+
+    /**
+     * 
+     * 
+     * @param   
+     * @return  
+     */
+    public function within($meters)
+    {
+        $this->query['radius'] = $meters;
+        $this->query['rankby'] = 'prominence';
 
         return $this;
     }
@@ -80,7 +76,7 @@ class MatchQuery
     public function get()
     {
         $client = new Client([
-            'base_uri' => 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json',
+            'base_uri' => 'https://maps.googleapis.com/maps/api/place/nearbysearch/json',
             'timeout'  => 10.0,
             'stream' => false,
         ]);
@@ -101,7 +97,22 @@ class MatchQuery
 
         $json = json_decode($response->getBody()->getContents(), true);
 
-        return $this->mapResultToPlace(Arr::get($json, 'candidates', [])[0]);
+        return PlaceCollection::make($this->mapResults(Arr::get($json, 'results', [])))
+            ->setProvider('google')
+            ->setCursor(Arr::get($json, 'next_page_token'));
+    }
+
+    /**
+     * 
+     * 
+     * @param   
+     * @return  
+     */
+    public function mapResults($results)
+    {
+        return collect($results)->map(function($result) {
+            return $this->mapResultToPlace($result);
+        });
     }
 
     /**
@@ -124,5 +135,20 @@ class MatchQuery
             ]),
             'categories' => Arr::get($result, 'types', [])
         ]);
+    }
+
+    /**
+     * 
+     * 
+     * @param   
+     * @return  
+     */
+    public function fromCursor($cursor)
+    {
+        $this->query = [
+            'pagetoken' => $cursor,
+        ];
+
+        return $this->get();
     }
 }

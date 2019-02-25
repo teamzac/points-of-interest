@@ -17,6 +17,16 @@ class Manager extends BaseManager
     }
 
     /**
+     * Create an instance of the specified driver
+     * 
+     * @return  YelpDriver
+     */
+    protected function createYelpDriver()
+    {
+        return new Drivers\Yelp\YelpDriver($this->app['config']['points-of-interest.connections.yelp']);
+    }
+
+    /**
      * Get the default driver name.
      * 
      * @return  string

@@ -1,8 +1,8 @@
 <?php
 
-namespace TeamZac\POI\Drivers\Google;
+namespace TeamZac\POI\Drivers\Yelp;
 
-class GoogleDriver 
+class YelpDriver 
 {
     /** @var string */
     protected $apiKey;

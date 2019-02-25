@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamZac\POI\Drivers\Google;
+namespace TeamZac\POI\Drivers\Yelp;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
@@ -10,11 +10,11 @@ use TeamZac\POI\Support\Address;
 
 class MatchQuery
 {
+    /** @var string */
+    protected $apiKey;
+
     /** @var array */
-    protected $query = [
-        'inputtype' => 'textquery',
-        'fields' => 'id,name,place_id,geometry/location,formatted_address,permanently_closed,photos,types',
-    ];
+    protected $query = [];
 
     /**
      * Construct the query
@@ -23,7 +23,7 @@ class MatchQuery
      */
     public function __construct($key)
     {
-        $this->query['key'] = $key;
+        $this->apiKey = $key;
     }
     
     /**
@@ -34,12 +34,7 @@ class MatchQuery
      */
     public function search($searchTerm)
     {
-        if (is_numeric($searchTerm)) {
-            return $this->phone($searchTerm);
-        }
-
-        $this->query['input'] = $searchTerm;
-        $this->query['inputtype'] = 'textquery';
+        $this->query['name'] = $searchTerm;
 
         return $this;
     }
@@ -66,7 +61,13 @@ class MatchQuery
      */
     public function near($address)
     {
-        $this->query['locationbias'] = sprintf('point:%s,%s', $address->latLng->getLat(), $address->latLng->getLng());
+        $this->query = array_merge([
+            'address1' => $address->street,
+            'city' => $address->city,
+            'state' => $address->state,
+            'country' => $address->country,
+            'zip_code' => $address->postalCode,
+        ], $this->query);
 
         return $this;
     }
@@ -80,9 +81,12 @@ class MatchQuery
     public function get()
     {
         $client = new Client([
-            'base_uri' => 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json',
+            'base_uri' => 'https://api.yelp.com/v3/businesses/matches',
             'timeout'  => 10.0,
             'stream' => false,
+            'headers' => [
+                'Authorization' => 'Bearer ' . $this->apiKey,
+            ]
         ]);
 
         $queryString =  http_build_query($this->query);
@@ -101,7 +105,7 @@ class MatchQuery
 
         $json = json_decode($response->getBody()->getContents(), true);
 
-        return $this->mapResultToPlace(Arr::get($json, 'candidates', [])[0]);
+        return $this->mapResultToPlace($json['businesses'][0]);
     }
 
     /**
@@ -113,16 +117,21 @@ class MatchQuery
     public function mapResultToPlace($result)
     {
         return (new Place)->setRaw($result)->map([
-            'provider' => 'google',
-            'id' => Arr::get($result, 'place_id'),
+            'provider' => 'yelp',
+            'id' => Arr::get($result, 'id'),
             'name' => Arr::get($result, 'name'),
             'address' => new Address([
-                'formatted' => Arr::get($result, 'formatted_address'),
+                'street' => Arr::get($result, 'location.address1'),
+                'city' => Arr::get($result, 'location.city'),
+                'state' => Arr::get($result, 'location.state'),
+                'postalCode' => Arr::get($result, 'location.zip_code'),
+                'country' => Arr::get($result, 'location.country'),
+                'formatted' => implode(', ', Arr::get($result, 'location.display_address')),
                 'latLng' => new LatLng(
-                    Arr::get($result, 'geometry.location.lat'), Arr::get($result, 'geometry.location.lng')
+                    Arr::get($result, 'coordinates.latitude'), Arr::get($result, 'coordinates.longitude')
                 ),
             ]),
-            'categories' => Arr::get($result, 'types', [])
+            'phone' => Arr::get($result, 'display_phone')
         ]);
     }
 }
