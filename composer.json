@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Teamzac\\PointsOfInterest\\": "src"
+            "Teamzac\\POI\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Teamzac\\PointsOfInterest\\Tests\\": "tests"
+            "Teamzac\\POI\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -44,10 +44,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Teamzac\\PointsOfInterest\\PointsOfInterestServiceProvider"
+                "Teamzac\\POI\\PointsOfInterestServiceProvider"
             ],
             "aliases": {
-                "PointsOfInterest": "Teamzac\\PointsOfInterest\\PointsOfInterestFacade"
+                "POI": "Teamzac\\POI\\Facades\\POI"
             }
         }
     }

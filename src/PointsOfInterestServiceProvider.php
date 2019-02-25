@@ -53,8 +53,8 @@ class PointsOfInterestServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'points-of-interest');
 
         // Register the main class to use with the facade
-        $this->app->singleton('points-of-interest', function () {
-            return new PointsOfInterest;
+        $this->app->singleton('poi', function () {
+            return new Manager;
         });
     }
 }
