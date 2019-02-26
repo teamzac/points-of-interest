@@ -20,7 +20,7 @@ class MatchQuery implements MatchQueryInterface
     protected $query = [
         'cs' => 'places',
         'size' => 1,
-        'cat' => 'eat-drink,going-out,shopping,petrol-station,accommodation,sports-facility-venue,amusement-holiday-park',
+        // 'cat' => 'eat-drink,going-out,shopping,petrol-station,accommodation,sports-facility-venue,amusement-holiday-park',
         'show_refs' => 'facebook,yelp,opentable',
     ];
 
@@ -75,7 +75,7 @@ class MatchQuery implements MatchQueryInterface
      */
     public function get()
     {
-        $response = $this->client->get('autosuggest', [
+        $response = $this->client->get('discover/search', [
             'query' => array_merge($this->query, $this->credentials),
         ]);
 
@@ -85,7 +85,8 @@ class MatchQuery implements MatchQueryInterface
         }
 
         $json = json_decode($response->getBody()->getContents(), true);
+        // dd($json);
 
-        return $this->mapResultToPlace(Arr::get($json, 'results.0'));
+        return $this->mapResultToPlace(Arr::get($json, 'results.items.0'));
     }
 }
