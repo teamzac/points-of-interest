@@ -3,8 +3,6 @@
 namespace TeamZac\POI\Drivers\Google;
 
 use Illuminate\Support\Arr;
-use TeamZac\POI\Support\Place;
-use TeamZac\POI\Support\LatLng;
 use TeamZac\POI\Support\Address;
 use TeamZac\POI\Contracts\MatchQueryInterface;
 use TeamZac\POI\Exceptions\InsufficientAddressException;
@@ -23,17 +21,17 @@ class MatchQuery implements MatchQueryInterface
     ];
 
     /**
-     * Construct the query
-     * 
+     * Construct the query.
+     *
      * @param   Google\Client $client
      */
     public function __construct($client)
     {
         $this->client = $client;
     }
-    
+
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function search($term = null)
     {
@@ -48,7 +46,7 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function phone($phone = null)
     {
@@ -59,11 +57,11 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function near(Address $address)
     {
-        if (!$address->hasLatLng()) {
+        if (! $address->hasLatLng()) {
             throw new InsufficientAddressException('Google requires a lat/lng pair for this query');
         }
 
@@ -73,7 +71,7 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function within($geometry)
     {
@@ -81,7 +79,7 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get()
     {

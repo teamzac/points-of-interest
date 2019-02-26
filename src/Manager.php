@@ -7,8 +7,8 @@ use Illuminate\Support\Manager as BaseManager;
 class Manager extends BaseManager
 {
     /**
-     * Create an instance of the specified driver
-     * 
+     * Create an instance of the specified driver.
+     *
      * @return  GoogleDriver
      */
     protected function createGoogleDriver()
@@ -17,8 +17,8 @@ class Manager extends BaseManager
     }
 
     /**
-     * Create an instance of the specified driver
-     * 
+     * Create an instance of the specified driver.
+     *
      * @return  YelpDriver
      */
     protected function createYelpDriver()
@@ -27,17 +27,18 @@ class Manager extends BaseManager
     }
 
     /**
-     * Create an instance of the specified driver
-     * 
+     * Create an instance of the specified driver.
+     *
      * @return  HereDriver
      */
     protected function createHereDriver()
     {
         return new Drivers\Here\HereDriver($this->app['config']['points-of-interest.connections.here']);
     }
+
     /**
-     * Create an instance of the specified driver
-     * 
+     * Create an instance of the specified driver.
+     *
      * @return  FourSquareDriver
      */
     protected function createFourSquareDriver()
@@ -47,7 +48,7 @@ class Manager extends BaseManager
 
     /**
      * Get the default driver name.
-     * 
+     *
      * @return  string
      */
     public function getDefaultDriver()

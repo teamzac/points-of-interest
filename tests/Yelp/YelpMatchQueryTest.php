@@ -5,15 +5,12 @@ namespace TeamZac\POI\Tests\Yelp;
 use TeamZac\POI\Facades\POI;
 use TeamZac\POI\Tests\TestCase;
 use TeamZac\POI\Support\Address;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use TeamZac\POI\Exceptions\InsufficientAddressException;
 
 class YelpMatchQueryTest extends TestCase
 {
     /** @test */
-    function a_full_address_is_required_by_yelp()
+    public function a_full_address_is_required_by_yelp()
     {
         $attributes = [
             'street' => '123 Main Street',
@@ -36,7 +33,7 @@ class YelpMatchQueryTest extends TestCase
                 continue;
             }
 
-            $this->fail('An InsufficientAddressException should have been thrown for not having the key: ' . $key);
+            $this->fail('An InsufficientAddressException should have been thrown for not having the key: '.$key);
         }
     }
 }

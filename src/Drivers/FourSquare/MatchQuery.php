@@ -17,7 +17,7 @@ class MatchQuery implements MatchQueryInterface
     /** @var array */
     protected $query = [
         'intent' => 'match',
-        'radius' => 250
+        'radius' => 250,
     ];
 
     public function __construct($client)
@@ -26,16 +26,17 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function search($term = null)
     {
         $this->query['query'] = $term;
+
         return $this;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function phone($phone = null)
     {
@@ -43,11 +44,11 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function near(Address $address)
     {
-        if (!$address->hasLatLng() || !$address->validate(['street'])) {
+        if (! $address->hasLatLng() || ! $address->validate(['street'])) {
             throw new InsufficientAddressException('FourSquare requires a lat/lng pair and/or street number for this query');
         }
 
@@ -58,7 +59,7 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function within($geometry)
     {
@@ -66,7 +67,7 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get()
     {
@@ -74,5 +75,4 @@ class MatchQuery implements MatchQueryInterface
 
         return $this->mapResultToPlace(Arr::get($json, 'response.venues.0'));
     }
-    
 }

@@ -11,14 +11,14 @@ use TeamZac\POI\Exceptions\InsufficientAddressException;
 class SearchQuery implements SearchQueryInterface
 {
     use MapsFourSquareResults;
-    
+
     /** @var FourSquare\Client */
     protected $client;
 
     /** @var array */
     protected $query = [
         'intent' => 'checkin',
-        'radius' => 1000
+        'radius' => 1000,
     ];
 
     public function __construct($client)
@@ -27,20 +27,21 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function search($term = null)
     {
         $this->query['query'] = $term;
+
         return $this;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function near(Address $address)
     {
-        if (!$address->hasLatLng() || !$address->validate(['street'])) {
+        if (! $address->hasLatLng() || ! $address->validate(['street'])) {
             throw new InsufficientAddressException('FourSquare requires a lat/lng pair and/or street number for this query');
         }
 
@@ -51,7 +52,7 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function within($geometry)
     {
@@ -59,7 +60,7 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get()
     {
@@ -70,20 +71,20 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * Map all of the results to Place objects
-     * 
+     * Map all of the results to Place objects.
+     *
      * @param   array $results
      * @return  Collection
      */
     public function mapResults($results)
     {
-        return collect($results)->map(function($result) {
+        return collect($results)->map(function ($result) {
             return $this->mapResultToPlace($result);
         });
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function fromCursor($cursor)
     {

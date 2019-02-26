@@ -6,15 +6,12 @@ use TeamZac\POI\Facades\POI;
 use TeamZac\POI\Support\LatLng;
 use TeamZac\POI\Tests\TestCase;
 use TeamZac\POI\Support\Address;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use TeamZac\POI\Exceptions\InsufficientAddressException;
 
 class FourSquareMatchQueryTest extends TestCase
 {
     /** @test */
-    function a_latlng_or_street_is_required_by_foursquare()
+    public function a_latlng_or_street_is_required_by_foursquare()
     {
         $attributes = [
             'street' => '123 Main Street',
@@ -34,7 +31,7 @@ class FourSquareMatchQueryTest extends TestCase
                 continue;
             }
 
-            $this->fail('An InsufficientAddressException should have been thrown for not having the key: ' . $key);
+            $this->fail('An InsufficientAddressException should have been thrown for not having the key: '.$key);
         }
     }
 }

@@ -11,13 +11,13 @@ class Client extends HttpClient
     /** @var array */
     protected $credentials;
 
-    public function __construct($credentials) 
+    public function __construct($credentials)
     {
         $this->credentials = $credentials;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function defaultHeaders()
     {
@@ -27,7 +27,7 @@ class Client extends HttpClient
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function defaultQueryParams()
     {

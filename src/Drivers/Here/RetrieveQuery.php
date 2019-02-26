@@ -17,7 +17,7 @@ class RetrieveQuery implements RetrieveQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($id)
     {

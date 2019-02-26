@@ -28,7 +28,7 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function search($term = null)
     {
@@ -38,7 +38,7 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function phone($phone = null)
     {
@@ -46,11 +46,11 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function near(Address $address)
     {
-        if (!$address->hasLatLng()) {
+        if (! $address->hasLatLng()) {
             throw new InsufficientAddressException('Here requires a lat/lng pair for this query');
         }
 
@@ -60,7 +60,7 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function within($geometry)
     {
@@ -68,7 +68,7 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get()
     {

@@ -29,8 +29,8 @@ class Place
     protected $raw;
 
     /**
-     * Get the provider
-     * 
+     * Get the provider.
+     *
      * @return  name
      */
     public function getProvider()
@@ -39,8 +39,8 @@ class Place
     }
 
     /**
-     * Get the remote ID associated with this place
-     * 
+     * Get the remote ID associated with this place.
+     *
      * @return  string
      */
     public function getId()
@@ -49,8 +49,8 @@ class Place
     }
 
     /**
-     * Get the name associated with this place
-     * 
+     * Get the name associated with this place.
+     *
      * @return  string
      */
     public function getName()
@@ -59,8 +59,8 @@ class Place
     }
 
     /**
-     * Get the address record associated with this place
-     * 
+     * Get the address record associated with this place.
+     *
      * @return  TeamZac\POI\Support\Address
      */
     public function getAddress()
@@ -69,8 +69,8 @@ class Place
     }
 
     /**
-     * Get a phone number associated with this place
-     * 
+     * Get a phone number associated with this place.
+     *
      * @return  string
      */
     public function getPhone()
@@ -79,8 +79,8 @@ class Place
     }
 
     /**
-     * Get the categories for this place
-     * 
+     * Get the categories for this place.
+     *
      * @return  array
      */
     public function getCategories()
@@ -89,8 +89,8 @@ class Place
     }
 
     /**
-     * Get the references for this place
-     * 
+     * Get the references for this place.
+     *
      * @return  array
      */
     public function getReferences()
@@ -99,8 +99,8 @@ class Place
     }
 
     /**
-     * Get the raw response from the provider
-     * 
+     * Get the raw response from the provider.
+     *
      * @return  array
      */
     public function getRaw()
@@ -108,30 +108,29 @@ class Place
         return $this->raw;
     }
 
-
     /**
-     * Set the raw response from the provider
-     * 
+     * Set the raw response from the provider.
+     *
      * @param   array
      * @return  $this
      */
-    public function setRaw($raw) 
+    public function setRaw($raw)
     {
         $this->raw = $raw;
+
         return $this;
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @param
+     * @return
      */
     public function map($attributes)
     {
         foreach ($attributes as $key => $value) {
             $this->{$key} = $value;
         }
+
         return $this;
     }
-}   
+}

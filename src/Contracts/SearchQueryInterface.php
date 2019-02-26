@@ -7,16 +7,16 @@ use TeamZac\POI\Support\Address;
 interface SearchQueryInterface
 {
     /**
-     * Search using the given term
-     * 
+     * Search using the given term.
+     *
      * @param   string $term
      * @return  $this
      */
     public function search($term = null);
 
     /**
-     * Search near a given address
-     * 
+     * Search near a given address.
+     *
      * @param   Address $address
      * @throws  InsufficientAddressException
      * @return  $this
@@ -24,23 +24,23 @@ interface SearchQueryInterface
     public function near(Address $address);
 
     /**
-     * Search within a given boundary
-     * 
-     * @param   
+     * Search within a given boundary.
+     *
+     * @param
      * @return  $this
      */
     public function within($geometry);
 
     /**
-     * Run the query 
-     * 
+     * Run the query.
+     *
      * @return  PlaceCollection
      */
     public function get();
 
     /**
-     * Run the query based on the given next page cursor
-     * 
+     * Run the query based on the given next page cursor.
+     *
      * @param   string $cursor
      * @return  PlaceCollection
      */

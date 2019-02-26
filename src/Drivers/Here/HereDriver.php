@@ -9,16 +9,16 @@ class HereDriver implements ProviderInterface
     /** @var array */
     protected $credentials;
 
-    public function __construct($config) 
+    public function __construct($config)
     {
         $this->credentials = [
             'app_id' => $config['app_id'],
-            'app_code' => $config['key']
+            'app_code' => $config['key'],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function match($term = null)
     {
@@ -26,7 +26,7 @@ class HereDriver implements ProviderInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function search($term = null)
     {
@@ -34,7 +34,7 @@ class HereDriver implements ProviderInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function retrieve($id)
     {
@@ -42,10 +42,8 @@ class HereDriver implements ProviderInterface
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @param
+     * @return
      */
     protected function hereClient()
     {

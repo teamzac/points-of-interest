@@ -2,26 +2,22 @@
 
 namespace TeamZac\POI\Drivers\Yelp;
 
-use Illuminate\Support\Arr;
-use TeamZac\POI\Support\Place;
-use TeamZac\POI\Support\LatLng;
-use TeamZac\POI\Support\Address;
 use TeamZac\POI\Contracts\RetrieveQueryInterface;
 
 class RetrieveQuery implements RetrieveQueryInterface
 {
     use MapsYelpResults;
-    
+
     /** @var Yelp\Client */
     protected $client;
 
-    public function __construct($client) 
+    public function __construct($client)
     {
         $this->client = $client;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($id)
     {
@@ -29,5 +25,4 @@ class RetrieveQuery implements RetrieveQueryInterface
 
         return $this->mapResultToPlace($json);
     }
-
 }

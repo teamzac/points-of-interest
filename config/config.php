@@ -21,5 +21,5 @@ return [
             'app_id' => env('FOURSQUARE_CLIENT_ID'),
             'key' => env('FOURSQUARE_CLIENT_SECRET'),
         ],
-    ]
+    ],
 ];
