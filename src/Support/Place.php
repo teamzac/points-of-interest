@@ -23,6 +23,9 @@ class Place
     protected $categories = [];
 
     /** @var array */
+    protected $references = [];
+
+    /** @var array */
     protected $raw;
 
     /**
@@ -83,6 +86,16 @@ class Place
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Get the references for this place
+     * 
+     * @return  array
+     */
+    public function getReferences()
+    {
+        return $this->references;
     }
 
     /**

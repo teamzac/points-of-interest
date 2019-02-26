@@ -32,6 +32,12 @@ trait MapsHereResults
             ]),
             'phone' => str_replace('+', '', Arr::get($result, 'contacts.phone.0.value')),
             'categories' => $this->mergeCategoriesAndTags($result),
+            'references' => collect(Arr::get($result, 'references'))->map(function($reference, $key) {
+                return [
+                    'service' => $key,
+                    'id' => $reference['id'],
+                ];
+            })->values()->toArray(),
         ]);
     }
 
