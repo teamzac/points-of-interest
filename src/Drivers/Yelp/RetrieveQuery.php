@@ -2,7 +2,6 @@
 
 namespace TeamZac\POI\Drivers\Yelp;
 
-use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
 use TeamZac\POI\Support\Place;
 use TeamZac\POI\Support\LatLng;
@@ -13,7 +12,7 @@ class RetrieveQuery implements RetrieveQueryInterface
 {
     use MapsYelpResults;
     
-    /** @var GuzzleHttp\Client */
+    /** @var Yelp\Client */
     protected $client;
 
     public function __construct($client) 
@@ -26,14 +25,7 @@ class RetrieveQuery implements RetrieveQueryInterface
      */
     public function get($id)
     {
-        $response = $this->client->get($id);
-
-        if ( $response->getStatusCode() >= 400 )
-        {
-            throw new \Exception('Unable to process Geocoding');
-        }
-
-        $json = json_decode($response->getBody()->getContents(), true);
+        $json = $this->client->get($id);
 
         return $this->mapResultToPlace($json);
     }

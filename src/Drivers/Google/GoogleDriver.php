@@ -2,7 +2,6 @@
 
 namespace TeamZac\POI\Drivers\Google;
 
-use GuzzleHttp\Client;
 use TeamZac\POI\Contracts\ProviderInterface;
 
 class GoogleDriver implements ProviderInterface
@@ -25,7 +24,7 @@ class GoogleDriver implements ProviderInterface
      */
     public function match($term = null)
     {
-        return (new MatchQuery($this->googleClient(), $this->apiKey))->search($term);
+        return (new MatchQuery($this->googleClient()))->search($term);
     }
 
     /**
@@ -33,7 +32,7 @@ class GoogleDriver implements ProviderInterface
      */
     public function search($term = null)
     {
-        return (new SearchQuery($this->googleClient(), $this->apiKey))->search($term);
+        return (new SearchQuery($this->googleClient()))->search($term);
     }
 
     /**
@@ -41,7 +40,7 @@ class GoogleDriver implements ProviderInterface
      */
     public function retrieve($id)
     {
-        return (new RetrieveQuery($this->googleClient(), $this->apiKey))->get($id);
+        return (new RetrieveQuery($this->googleClient()))->get($id);
     }
 
     /**
@@ -52,13 +51,6 @@ class GoogleDriver implements ProviderInterface
      */
     protected function googleClient()
     {
-        return new Client([
-            'base_uri' => 'https://maps.googleapis.com/maps/api/place/',
-            'timeout'  => 10.0,
-            'stream' => false,
-            'headers' => [
-                'Accept'     => 'application/json',
-            ],
-        ]);
+        return new Client($this->apiKey);
     }
 }

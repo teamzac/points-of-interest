@@ -2,17 +2,17 @@
 
 namespace TeamZac\POI\Drivers\Yelp;
 
-use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
 use TeamZac\POI\Support\Address;
 use TeamZac\POI\Support\PlaceCollection;
 use TeamZac\POI\Contracts\SearchQueryInterface;
+use TeamZac\POI\Exceptions\InsufficientAddressException;
 
 class SearchQuery implements SearchQueryInterface
 {
     use MapsYelpResults;
 
-    /** @var GuzzleHttp\Client */
+    /** @var Yelp\Client */
     protected $client;
 
     /** @var string */
@@ -28,7 +28,7 @@ class SearchQuery implements SearchQueryInterface
     /**
      * Construct the query
      * 
-     * @param   GuzzleHttp\Client $client
+     * @param   Yelp\Client $client
      */
     public function __construct($client)
     {
@@ -46,10 +46,7 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
     public function categories(array $categories)
     {
@@ -63,6 +60,10 @@ class SearchQuery implements SearchQueryInterface
      */
     public function near(Address $address)
     {
+        if (!$address->hasLatLng()) {
+            throw new InsufficientAddressException('Yelp requires a lat/lng pair for this query');
+        }
+
         $this->query = array_merge([
             'latitude' => $address->latLng->getLat(),
             'longitude' => $address->latLng->getLng(),
@@ -106,20 +107,22 @@ class SearchQuery implements SearchQueryInterface
      */
     public function get()
     {
-        $response = $this->client->get($this->endpointUrl, [
-            'query' => $this->buildQueryString(),
-        ]);
-
-        if ( $response->getStatusCode() >= 400 )
-        {
-            throw new \Exception('Unable to process Geocoding');
-        }
-
-        $json = json_decode($response->getBody()->getContents(), true);
+        $json = $this->client->get($this->endpointUrl, $this->buildQueryParams());
 
         return PlaceCollection::make($this->mapResults(Arr::get($json, 'businesses', [])))
             ->setProvider('yelp')
             ->setCursor($this->getCursor());
+    }
+
+    /**
+     * Build the query params
+     * 
+     * @param   array $attributes
+     * @return  array
+     */
+    protected function buildQueryParams($attributes = [])
+    {
+        return array_merge($attributes, $this->query);
     }
 
     /**
@@ -128,9 +131,9 @@ class SearchQuery implements SearchQueryInterface
      * @param   array $attributes
      * @return  string
      */
-    public function buildQueryString($attributes = [])
+    protected function buildQueryString($attributes = [])
     {
-        return http_build_query(array_merge($attributes, $this->query));
+        return http_build_query($this->buildQueryParams($attributes));
     }
 
     /**
@@ -150,10 +153,10 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
+     * Iterate and map results to place objects
      * 
-     * 
-     * @param   
-     * @return  
+     * @param   array $results
+     * @return  Collection
      */
     public function mapResults($results)
     {

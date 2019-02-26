@@ -13,7 +13,7 @@ class MatchQuery implements MatchQueryInterface
 {
     use MapsYelpResults;
 
-    /** @var GuzzleHttp\Client */
+    /** @var Yelp\Client */
     protected $client;
 
     /** @var array */
@@ -83,19 +83,7 @@ class MatchQuery implements MatchQueryInterface
      */
     public function get()
     {
-        $response = $this->client->get('matches', [
-            'headers' => [
-                'Accept'     => 'application/json',
-            ],
-            'query' => $this->query,
-        ]);
-
-        if ( $response->getStatusCode() >= 400 )
-        {
-            throw new \Exception('Unable to process Geocoding');
-        }
-
-        $json = json_decode($response->getBody()->getContents(), true);
+        $json = $this->client->get('matches', $this->query);
 
         return $this->mapResultToPlace($json['businesses'][0]);
     }

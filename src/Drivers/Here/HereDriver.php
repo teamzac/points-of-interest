@@ -2,9 +2,6 @@
 
 namespace TeamZac\POI\Drivers\Here;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Uri;
-use GuzzleHttp\HandlerStack;
 use TeamZac\POI\Contracts\ProviderInterface;
 
 class HereDriver implements ProviderInterface
@@ -25,7 +22,7 @@ class HereDriver implements ProviderInterface
      */
     public function match($term = null)
     {
-        return (new MatchQuery($this->hereClient(), $this->credentials))->search($term);
+        return (new MatchQuery($this->hereClient()))->search($term);
     }
 
     /**
@@ -33,7 +30,7 @@ class HereDriver implements ProviderInterface
      */
     public function search($term = null)
     {
-        return (new SearchQuery($this->hereClient(), $this->credentials))->search($term);
+        return (new SearchQuery($this->hereClient()))->search($term);
     }
 
     /**
@@ -41,7 +38,7 @@ class HereDriver implements ProviderInterface
      */
     public function retrieve($id)
     {
-        return (new RetrieveQuery($this->hereClient(), $this->credentials))->get($id);
+        return (new RetrieveQuery($this->hereClient()))->get($id);
     }
 
     /**
@@ -52,13 +49,6 @@ class HereDriver implements ProviderInterface
      */
     protected function hereClient()
     {
-        return new Client([
-            'base_uri' => 'https://places.cit.api.here.com/places/v1/',
-            'timeout'  => 10.0,
-            'stream' => false,
-            'headers' => [
-                'Accept'     => 'application/json',
-            ]
-        ]);
+        return new Client($this->credentials);
     }
 }

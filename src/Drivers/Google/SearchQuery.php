@@ -6,12 +6,13 @@ use Illuminate\Support\Arr;
 use TeamZac\POI\Support\Address;
 use TeamZac\POI\Support\PlaceCollection;
 use TeamZac\POI\Contracts\SearchQueryInterface;
+use TeamZac\POI\Exceptions\InsufficientAddressException;
 
 class SearchQuery implements SearchQueryInterface
 {
     use MapsGoogleResults;
     
-    /** @var GuzzleHttp\Client */
+    /** @var Google\Client */
     protected $client;
 
     /** @var array */
@@ -22,12 +23,11 @@ class SearchQuery implements SearchQueryInterface
     /**
      * Construct the query
      * 
-     * @param   array $key
+     * @param   GoogleClient $client
      */
-    public function __construct($client, $key)
+    public function __construct($client)
     {
         $this->client = $client;
-        $this->query['key'] = $key;
     }
     
     /**
@@ -45,7 +45,11 @@ class SearchQuery implements SearchQueryInterface
      */
     public function near(Address $address)
     {
-        $this->query['location'] = sprintf('%s,%s', $address->latLng->getLat(), $address->latLng->getLng());
+        if (!$address->hasLatLng()) {
+            throw new InsufficientAddressException('Google requires a lat/lng pair for this query');
+        }
+
+        $this->query['location'] = $address->latLng->getDescription();
         $this->query['rankby'] = 'distance';
 
         return $this;
@@ -75,19 +79,7 @@ class SearchQuery implements SearchQueryInterface
      */
     public function get()
     {
-        $response = $this->client->get('nearbysearch/json', [
-            'headers' => [
-                'Accept'     => 'application/json',
-            ],
-            'query' => $this->query,
-        ]);
-
-        if ( $response->getStatusCode() >= 400 )
-        {
-            throw new \Exception('Unable to process Geocoding');
-        }
-
-        $json = json_decode($response->getBody()->getContents(), true);
+        $json = $this->client->get('nearbysearch/json', $this->query);
 
         return PlaceCollection::make($this->mapResults(Arr::get($json, 'results', [])))
             ->setProvider('google')

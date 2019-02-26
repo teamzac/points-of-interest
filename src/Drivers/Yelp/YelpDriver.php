@@ -2,7 +2,6 @@
 
 namespace TeamZac\POI\Drivers\Yelp;
 
-use GuzzleHttp\Client;
 use TeamZac\POI\Contracts\ProviderInterface;
 
 class YelpDriver implements ProviderInterface
@@ -46,14 +45,6 @@ class YelpDriver implements ProviderInterface
 
     protected function yelpClient() 
     {
-        return new Client([
-            'base_uri' => 'https://api.yelp.com/v3/businesses/',
-            'timeout'  => 10.0,
-            'stream' => false,
-            'headers' => [
-                'Authorization' => 'Bearer ' . $this->apiKey,
-                'accept' => 'application/json',
-            ]
-        ]);
+        return new Client($this->apiKey);
     }
 }

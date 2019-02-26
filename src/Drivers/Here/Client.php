@@ -1,18 +1,15 @@
 <?php
 
-namespace TeamZac\POI\Drivers\FourSquare;
+namespace TeamZac\POI\Drivers\Here;
 
 use TeamZac\POI\Support\HttpClient;
 
 class Client extends HttpClient
-{   
-    public $baseUri = 'https://api.foursquare.com/v2/';
+{
+    public $baseUri = 'https://places.cit.api.here.com/places/v1/';
 
     /** @var array */
     protected $credentials;
-
-    /** @var string */
-    protected $apiVersion = '20190225';
 
     public function __construct($credentials) 
     {
@@ -22,10 +19,18 @@ class Client extends HttpClient
     /**
      * @inheritdoc
      */
+    public function defaultHeaders()
+    {
+        return [
+            'Accept'     => 'application/json',
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function defaultQueryParams()
     {
-        return array_merge($this->credentials, [
-            'v' => $this->apiVersion,
-        ]);
+        return $this->credentials;
     }
 }

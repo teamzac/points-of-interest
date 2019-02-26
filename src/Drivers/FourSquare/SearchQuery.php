@@ -6,6 +6,7 @@ use Illuminate\Support\Arr;
 use TeamZac\POI\Support\Address;
 use TeamZac\POI\Support\PlaceCollection;
 use TeamZac\POI\Contracts\SearchQueryInterface;
+use TeamZac\POI\Exceptions\InsufficientAddressException;
 
 class SearchQuery implements SearchQueryInterface
 {

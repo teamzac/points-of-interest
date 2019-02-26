@@ -13,7 +13,7 @@ class MatchQuery implements MatchQueryInterface
 {
     use MapsGoogleResults;
 
-    /** @var GuzzleHttp\Client */
+    /** @var Google\Client */
     protected $client;
 
     /** @var array */
@@ -25,12 +25,11 @@ class MatchQuery implements MatchQueryInterface
     /**
      * Construct the query
      * 
-     * @param   array $key
+     * @param   Google\Client $client
      */
-    public function __construct($client, $key)
+    public function __construct($client)
     {
         $this->client = $client;
-        $this->query['key'] = $key;
     }
     
     /**
@@ -86,19 +85,7 @@ class MatchQuery implements MatchQueryInterface
      */
     public function get()
     {
-        $response = $this->client->get('findplacefromtext/json', [
-            'headers' => [
-                'Accept'     => 'application/json',
-            ],
-            'query' => $this->query,
-        ]);
-
-        if ( $response->getStatusCode() >= 400 )
-        {
-            throw new \Exception('Unable to process Geocoding');
-        }
-
-        $json = json_decode($response->getBody()->getContents(), true);
+        $json = $this->client->get('findplacefromtext/json', $this->query);
 
         return $this->mapResultToPlace(Arr::get($json, 'candidates', [])[0]);
     }

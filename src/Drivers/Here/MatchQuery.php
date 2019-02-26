@@ -5,16 +5,14 @@ namespace TeamZac\POI\Drivers\Here;
 use Illuminate\Support\Arr;
 use TeamZac\POI\Support\Address;
 use TeamZac\POI\Contracts\MatchQueryInterface;
+use TeamZac\POI\Exceptions\InsufficientAddressException;
 
 class MatchQuery implements MatchQueryInterface
 {
     use MapsHereResults;
 
-    /** @var GuzzleHttp\Client */
+    /** @var Here\Client */
     protected $client;
-
-    /** @var array */
-    protected $credentials;
 
     /** @var array */
     protected $query = [
@@ -24,10 +22,9 @@ class MatchQuery implements MatchQueryInterface
         'show_refs' => 'facebook,yelp,opentable',
     ];
 
-    public function __construct($client, $credentials)
+    public function __construct($client)
     {
         $this->client = $client;
-        $this->credentials = $credentials;
     }
 
     /**
@@ -75,17 +72,7 @@ class MatchQuery implements MatchQueryInterface
      */
     public function get()
     {
-        $response = $this->client->get('discover/search', [
-            'query' => array_merge($this->query, $this->credentials),
-        ]);
-
-        if ( $response->getStatusCode() >= 400 )
-        {
-            throw new \Exception('Unable to process Geocoding');
-        }
-
-        $json = json_decode($response->getBody()->getContents(), true);
-        // dd($json);
+        $json = $this->client->get('discover/search', $this->query);
 
         return $this->mapResultToPlace(Arr::get($json, 'results.items.0'));
     }

@@ -6,33 +6,31 @@ use Illuminate\Support\Arr;
 use TeamZac\POI\Support\Address;
 use TeamZac\POI\Support\PlaceCollection;
 use TeamZac\POI\Drivers\Here\MapsHereResults;
+use TeamZac\POI\Contracts\SearchQueryInterface;
+use TeamZac\POI\Exceptions\InsufficientAddressException;
 
-class SearchQuery 
+class SearchQuery implements SearchQueryInterface
 {
     use MapsHereResults;
 
-    /** @var GuzzleHttp\Client */
+    /** @var Here\Client */
     protected $client;
 
-    /** @var array */
-    protected $credentials;
+    /** @var string */
+    protected $cursorUrl;
 
     /** @var array */
     protected $query = [
         'show_refs' => 'facebook,yelp,opentable',
     ];
 
-    public function __construct($client, $credentials)
+    public function __construct($client)
     {
         $this->client = $client;
-        $this->credentials = $credentials;
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @inheritdoc
      */
     public function search($term = null)
     {
@@ -44,25 +42,30 @@ class SearchQuery
      */
     public function near(Address $address)
     {
+        if (!$address->hasLatLng()) {
+            throw new InsufficientAddressException('Here requires a lat/lng pair for this query');
+        }
+
         $this->query['at'] = $address->latLng->getDescription();
         return $this;
     }
 
+    /** 
+     * @inheritdoc
+     */
+    public function within($geometry)
+    {
+        return $this;
+    }
+
     /**
-     * @inherit
+     * @inheritdoc
      */
     public function get()
     {
-        $response = $this->client->get('discover/explore', [
-            'query' => array_merge($this->query, $this->credentials)
-        ]);
-
-        if ( $response->getStatusCode() >= 400 )
-        {
-            throw new \Exception('Unable to process Geocoding');
-        }
-
-        $json = json_decode($response->getBody()->getContents(), true);
+        $json = $this->cursorUrl ?
+            $this->client->get($this->cursorUrl) :
+            $this->client->get('discover/explore', $this->query);
 
         return PlaceCollection::make($this->mapResults(Arr::get($json, 'results.items', [])))
             ->setProvider('here')
@@ -81,5 +84,14 @@ class SearchQuery
             return $this->mapResultToPlace($result);
         });
     }
-    
+
+    /**
+     * @inheritdoc
+     */
+    public function fromCursor($cursor)
+    {
+        $this->cursorUrl = $cursor;
+
+        return $this->get();
+    }
 }
