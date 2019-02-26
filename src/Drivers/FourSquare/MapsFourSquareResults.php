@@ -11,10 +11,8 @@ use TeamZac\POI\Support\Address;
 trait MapsFourSquareResults
 {
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @param
+     * @return
      */
     public function mapResultToPlace($result)
     {
@@ -34,10 +32,9 @@ trait MapsFourSquareResults
                 ),
             ]),
             'phone' => Arr::get($result, 'contact.phone'),
-            'categories' => collect(Arr::get($result, 'categories', []))->map(function($category) {
+            'categories' => collect(Arr::get($result, 'categories', []))->map(function ($category) {
                 return Str::slug(Arr::get($category, 'shortName'));
             })->toArray(),
         ]);
     }
-    
 }

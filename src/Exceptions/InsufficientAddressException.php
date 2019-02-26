@@ -2,4 +2,6 @@
 
 namespace TeamZac\POI\Exceptions;
 
-class InsufficientAddressException extends \RuntimeException {}
+class InsufficientAddressException extends \RuntimeException
+{
+}

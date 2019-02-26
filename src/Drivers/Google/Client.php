@@ -17,7 +17,7 @@ class Client extends HttpClient
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function defaultHeaders()
     {
@@ -27,7 +27,7 @@ class Client extends HttpClient
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function defaultQueryParams()
     {

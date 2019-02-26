@@ -10,8 +10,8 @@ class FourSquareDriver implements ProviderInterface
     protected $credentials;
 
     /**
-     * Construct the driver
-     * 
+     * Construct the driver.
+     *
      * @param   array $config
      */
     public function __construct($config)
@@ -23,15 +23,15 @@ class FourSquareDriver implements ProviderInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function retrieve($id) 
+    public function retrieve($id)
     {
         return (new RetrieveQuery($this->client()))->get($id);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function match($term = null)
     {
@@ -39,7 +39,7 @@ class FourSquareDriver implements ProviderInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function search($term = null)
     {
@@ -47,14 +47,11 @@ class FourSquareDriver implements ProviderInterface
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @param
+     * @return
      */
     public function client()
     {
         return new Client($this->credentials);
     }
-    
 }

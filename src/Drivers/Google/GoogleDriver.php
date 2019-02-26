@@ -10,8 +10,8 @@ class GoogleDriver implements ProviderInterface
     protected $apiKey;
 
     /**
-     * Construct the driver
-     * 
+     * Construct the driver.
+     *
      * @param   array $config
      */
     public function __construct($config)
@@ -20,7 +20,7 @@ class GoogleDriver implements ProviderInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function match($term = null)
     {
@@ -28,7 +28,7 @@ class GoogleDriver implements ProviderInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function search($term = null)
     {
@@ -36,7 +36,7 @@ class GoogleDriver implements ProviderInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function retrieve($id)
     {
@@ -44,10 +44,8 @@ class GoogleDriver implements ProviderInterface
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @param
+     * @return
      */
     protected function googleClient()
     {

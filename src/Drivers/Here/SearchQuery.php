@@ -5,7 +5,6 @@ namespace TeamZac\POI\Drivers\Here;
 use Illuminate\Support\Arr;
 use TeamZac\POI\Support\Address;
 use TeamZac\POI\Support\PlaceCollection;
-use TeamZac\POI\Drivers\Here\MapsHereResults;
 use TeamZac\POI\Contracts\SearchQueryInterface;
 use TeamZac\POI\Exceptions\InsufficientAddressException;
 
@@ -30,7 +29,7 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function search($term = null)
     {
@@ -38,20 +37,21 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function near(Address $address)
     {
-        if (!$address->hasLatLng()) {
+        if (! $address->hasLatLng()) {
             throw new InsufficientAddressException('Here requires a lat/lng pair for this query');
         }
 
         $this->query['at'] = $address->latLng->getDescription();
+
         return $this;
     }
 
-    /** 
-     * @inheritdoc
+    /**
+     * {@inheritdoc}
      */
     public function within($geometry)
     {
@@ -59,7 +59,7 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get()
     {
@@ -73,20 +73,20 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * Map all of the results to Place objects
-     * 
+     * Map all of the results to Place objects.
+     *
      * @param   array $results
      * @return  Collection
      */
     public function mapResults($results)
     {
-        return collect($results)->map(function($result) {
+        return collect($results)->map(function ($result) {
             return $this->mapResultToPlace($result);
         });
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function fromCursor($cursor)
     {

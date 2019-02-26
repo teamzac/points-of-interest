@@ -10,10 +10,8 @@ use TeamZac\POI\Support\Address;
 trait MapsGoogleResults
 {
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @param
+     * @return
      */
     public function mapResultToPlace($result)
     {
@@ -27,7 +25,7 @@ trait MapsGoogleResults
                     Arr::get($result, 'geometry.location.lat'), Arr::get($result, 'geometry.location.lng')
                 ),
             ]),
-            'categories' => Arr::get($result, 'types', [])
+            'categories' => Arr::get($result, 'types', []),
         ]);
     }
 }

@@ -12,16 +12,14 @@ class Address
         $this->attributes = $attributes;
     }
 
-    public static function make($attributes = []) 
+    public static function make($attributes = [])
     {
         return new static($attributes);
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @param
+     * @return
      */
     public function __get($key)
     {
@@ -29,8 +27,8 @@ class Address
     }
 
     /**
-     * Validate that the specified fields are present
-     * 
+     * Validate that the specified fields are present.
+     *
      * @param   array $fields
      * @return  bool
      */
@@ -46,13 +44,12 @@ class Address
     }
 
     /**
-     * Does the address have a latitude/longitude pair
-     * 
+     * Does the address have a latitude/longitude pair.
+     *
      * @return  bool
      */
     public function hasLatLng()
     {
         return $this->latLng && $this->latLng instanceof LatLng;
     }
-
 }

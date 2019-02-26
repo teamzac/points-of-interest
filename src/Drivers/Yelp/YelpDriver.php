@@ -10,8 +10,8 @@ class YelpDriver implements ProviderInterface
     protected $apiKey;
 
     /**
-     * Construct the driver
-     * 
+     * Construct the driver.
+     *
      * @param   array $config
      */
     public function __construct($config)
@@ -20,7 +20,7 @@ class YelpDriver implements ProviderInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function match($term = null)
     {
@@ -28,7 +28,7 @@ class YelpDriver implements ProviderInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function search($term = null)
     {
@@ -36,14 +36,14 @@ class YelpDriver implements ProviderInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function retrieve($id) 
+    public function retrieve($id)
     {
         return (new RetrieveQuery($this->yelpClient()))->get($id);
     }
 
-    protected function yelpClient() 
+    protected function yelpClient()
     {
         return new Client($this->apiKey);
     }

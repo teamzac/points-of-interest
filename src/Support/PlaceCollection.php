@@ -14,34 +14,34 @@ class PlaceCollection extends Collection
     protected $nextPageCursor;
 
     /**
-     * Set the provider for this collection
-     * 
+     * Set the provider for this collection.
+     *
      * @param   string $provider
      * @return  $this
      */
     public function setProvider($provider)
     {
         $this->provider = $provider;
+
         return $this;
     }
 
     /**
-     * Set the cursor for the next page query
-     * 
+     * Set the cursor for the next page query.
+     *
      * @param   string $cursor
      * @return  $this
      */
     public function setCursor($cursor)
     {
         $this->nextPageCursor = $cursor;
+
         return $this;
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @param
+     * @return
      */
     public function nextPage()
     {

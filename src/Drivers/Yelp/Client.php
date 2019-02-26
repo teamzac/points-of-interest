@@ -10,20 +10,19 @@ class Client extends HttpClient
 
     protected $apiKey;
 
-    public function __construct($apiKey) 
+    public function __construct($apiKey)
     {
         $this->apiKey = $apiKey;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function defaultHeaders()
     {
         return [
-            'Authorization' => 'Bearer ' . $this->apiKey,
+            'Authorization' => 'Bearer '.$this->apiKey,
             'accept' => 'application/json',
         ];
     }
-    
 }

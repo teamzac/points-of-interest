@@ -10,8 +10,8 @@ use TeamZac\POI\Support\Address;
 trait MapsYelpResults
 {
     /**
-     * Map an API result to a Place object
-     * 
+     * Map an API result to a Place object.
+     *
      * @param   array $result
      * @return  TeamZac\POI\Support\Place
      */
@@ -33,7 +33,7 @@ trait MapsYelpResults
                 ),
             ]),
             'phone' => Arr::get($result, 'display_phone'),
-            'categories' => collect(Arr::get($result, 'categories', []))->map(function($category) {
+            'categories' => collect(Arr::get($result, 'categories', []))->map(function ($category) {
                 return $category['alias'];
             })->toArray(),
         ]);

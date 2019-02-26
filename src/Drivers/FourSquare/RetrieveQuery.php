@@ -8,7 +8,7 @@ use TeamZac\POI\Contracts\RetrieveQueryInterface;
 class RetrieveQuery implements RetrieveQueryInterface
 {
     use MapsFourSquareResults;
-    
+
     /** @var FourSquare\Client */
     protected $client;
 
@@ -18,7 +18,7 @@ class RetrieveQuery implements RetrieveQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($id)
     {
@@ -26,5 +26,4 @@ class RetrieveQuery implements RetrieveQueryInterface
 
         return $this->mapResultToPlace(Arr::get($json, 'response.venue'));
     }
-    
 }

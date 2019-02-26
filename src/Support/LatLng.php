@@ -4,28 +4,26 @@ namespace TeamZac\POI\Support;
 
 class LatLng
 {
-    /** @var double */
+    /** @var float */
     protected $lat;
 
-    /** @var double */
+    /** @var float */
     protected $lng;
 
-    public function __construct($lat, $lng) 
+    public function __construct($lat, $lng)
     {
         $this->lat = $lat;
         $this->lng = $lng;
     }
 
-    public static function make($lat, $lng) 
+    public static function make($lat, $lng)
     {
         return new static($lat, $lng);
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @param
+     * @return
      */
     public function getLat()
     {
@@ -33,10 +31,8 @@ class LatLng
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @param
+     * @return
      */
     public function getLng()
     {
@@ -44,10 +40,8 @@ class LatLng
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @param
+     * @return
      */
     public function getDescription()
     {

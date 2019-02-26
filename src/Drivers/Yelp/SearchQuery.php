@@ -26,17 +26,17 @@ class SearchQuery implements SearchQueryInterface
     ];
 
     /**
-     * Construct the query
-     * 
+     * Construct the query.
+     *
      * @param   Yelp\Client $client
      */
     public function __construct($client)
     {
         $this->client = $client;
     }
-    
+
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function search($term = null)
     {
@@ -46,7 +46,7 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function categories(array $categories)
     {
@@ -56,11 +56,11 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function near(Address $address)
     {
-        if (!$address->hasLatLng()) {
+        if (! $address->hasLatLng()) {
             throw new InsufficientAddressException('Yelp requires a lat/lng pair for this query');
         }
 
@@ -73,7 +73,7 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function within($geometry)
     {
@@ -81,29 +81,31 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * Use the provider's distance sorting algorithm
-     * 
+     * Use the provider's distance sorting algorithm.
+     *
      * @return  $this
      */
     public function sortByDistance()
     {
         $this->query['sort_by'] = 'distance';
+
         return $this;
     }
 
     /**
-     * Use the provider's default sorting algorithm
-     * 
+     * Use the provider's default sorting algorithm.
+     *
      * @return  $this
      */
     public function sortByDefault()
     {
         $this->query['sort_by'] = 'best_match';
+
         return $this;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get()
     {
@@ -115,8 +117,8 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * Build the query params
-     * 
+     * Build the query params.
+     *
      * @param   array $attributes
      * @return  array
      */
@@ -126,8 +128,8 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * Build the query string, overriding any query params already set as needed
-     * 
+     * Build the query string, overriding any query params already set as needed.
+     *
      * @param   array $attributes
      * @return  string
      */
@@ -137,8 +139,8 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * Create a cursor URL, since Yelp does not provide one
-     * 
+     * Create a cursor URL, since Yelp does not provide one.
+     *
      * @return  string
      */
     public function getCursor()
@@ -153,25 +155,26 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * Iterate and map results to place objects
-     * 
+     * Iterate and map results to place objects.
+     *
      * @param   array $results
      * @return  Collection
      */
     public function mapResults($results)
     {
-        return collect($results)->map(function($result) {
+        return collect($results)->map(function ($result) {
             return $this->mapResultToPlace($result);
         });
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function fromCursor($cursor)
     {
         $queryString = parse_url($cursor, PHP_URL_QUERY);
         parse_str($queryString, $this->query);
+
         return $this->get();
     }
 }

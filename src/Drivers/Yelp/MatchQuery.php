@@ -2,9 +2,6 @@
 
 namespace TeamZac\POI\Drivers\Yelp;
 
-use Illuminate\Support\Arr;
-use TeamZac\POI\Support\Place;
-use TeamZac\POI\Support\LatLng;
 use TeamZac\POI\Support\Address;
 use TeamZac\POI\Contracts\MatchQueryInterface;
 use TeamZac\POI\Exceptions\InsufficientAddressException;
@@ -20,17 +17,17 @@ class MatchQuery implements MatchQueryInterface
     protected $query = [];
 
     /**
-     * Construct the query
-     * 
+     * Construct the query.
+     *
      * @param   $client
      */
     public function __construct($client)
     {
         $this->client = $client;
     }
-    
+
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function search($term = null)
     {
@@ -40,7 +37,7 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function phone($phone = null)
     {
@@ -51,11 +48,11 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function near(Address $address)
     {
-        if ( !$address->validate(['street', 'city', 'state', 'country', 'postalCode']) ) {
+        if (! $address->validate(['street', 'city', 'state', 'country', 'postalCode'])) {
             throw new InsufficientAddressException('Yelp requires a street, city, state, country, and postal code for this query');
         }
 
@@ -71,7 +68,7 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function within($geometry)
     {
@@ -79,7 +76,7 @@ class MatchQuery implements MatchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get()
     {

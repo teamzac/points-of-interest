@@ -10,10 +10,8 @@ use TeamZac\POI\Support\Address;
 trait MapsHereResults
 {
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @param
+     * @return
      */
     public function mapResultToPlace($result)
     {
@@ -32,7 +30,7 @@ trait MapsHereResults
             ]),
             'phone' => str_replace('+', '', Arr::get($result, 'contacts.phone.0.value')),
             'categories' => $this->mergeCategoriesAndTags($result),
-            'references' => collect(Arr::get($result, 'references'))->map(function($reference, $key) {
+            'references' => collect(Arr::get($result, 'references'))->map(function ($reference, $key) {
                 return [
                     'service' => $key,
                     'id' => $reference['id'],
@@ -42,28 +40,25 @@ trait MapsHereResults
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @param
+     * @return
      */
     public function findValueWithFallback($array, $key, $fallback)
     {
-        if (!$value = Arr::get($array, $key)) {
+        if (! $value = Arr::get($array, $key)) {
             $value = Arr::get($array, $fallback);
         }
+
         return $value;
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @param
+     * @return
      */
     public function mergeCategoriesAndTags($result)
     {
-        if (!$categories = Arr::get($result, 'categories')) {
+        if (! $categories = Arr::get($result, 'categories')) {
             $category = Arr::get($result, 'category');
             if (is_string($category)) {
                 $categories = [
@@ -83,14 +78,11 @@ trait MapsHereResults
     }
 
     /**
-     * 
-     * 
-     * @param   
-     * @return  
+     * @param
+     * @return
      */
     public function extractTaxonomyIds($array)
     {
         return collect($array)->pluck('id');
     }
-    
 }

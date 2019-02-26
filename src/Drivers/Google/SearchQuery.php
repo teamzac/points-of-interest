@@ -11,7 +11,7 @@ use TeamZac\POI\Exceptions\InsufficientAddressException;
 class SearchQuery implements SearchQueryInterface
 {
     use MapsGoogleResults;
-    
+
     /** @var Google\Client */
     protected $client;
 
@@ -21,17 +21,17 @@ class SearchQuery implements SearchQueryInterface
     ];
 
     /**
-     * Construct the query
-     * 
+     * Construct the query.
+     *
      * @param   GoogleClient $client
      */
     public function __construct($client)
     {
         $this->client = $client;
     }
-    
+
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function search($term = null)
     {
@@ -41,11 +41,11 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function near(Address $address)
     {
-        if (!$address->hasLatLng()) {
+        if (! $address->hasLatLng()) {
             throw new InsufficientAddressException('Google requires a lat/lng pair for this query');
         }
 
@@ -56,7 +56,7 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function radius($meters)
     {
@@ -67,7 +67,7 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function within($geometry)
     {
@@ -75,7 +75,7 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get()
     {
@@ -87,20 +87,20 @@ class SearchQuery implements SearchQueryInterface
     }
 
     /**
-     * Map all of the results to Place objects
-     * 
+     * Map all of the results to Place objects.
+     *
      * @param   array $results
      * @return  Collection
      */
     public function mapResults($results)
     {
-        return collect($results)->map(function($result) {
+        return collect($results)->map(function ($result) {
             return $this->mapResultToPlace($result);
         });
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function fromCursor($cursor)
     {

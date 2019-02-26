@@ -5,7 +5,7 @@ namespace TeamZac\POI\Drivers\FourSquare;
 use TeamZac\POI\Support\HttpClient;
 
 class Client extends HttpClient
-{   
+{
     public $baseUri = 'https://api.foursquare.com/v2/';
 
     /** @var array */
@@ -14,13 +14,13 @@ class Client extends HttpClient
     /** @var string */
     protected $apiVersion = '20190225';
 
-    public function __construct($credentials) 
+    public function __construct($credentials)
     {
         $this->credentials = $credentials;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function defaultQueryParams()
     {

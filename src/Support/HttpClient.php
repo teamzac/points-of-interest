@@ -7,8 +7,8 @@ use GuzzleHttp\Client;
 class HttpClient
 {
     /**
-     * Perform a GET request
-     * 
+     * Perform a GET request.
+     *
      * @param   string $endpoint
      * @param   array $queryParams
      * @return  array
@@ -17,11 +17,10 @@ class HttpClient
     public function get($endpoint, $queryParams = [])
     {
         $response = $this->httpClient()->get($endpoint, [
-            'query' => http_build_query(array_merge($queryParams, $this->defaultQueryParams()))
+            'query' => http_build_query(array_merge($queryParams, $this->defaultQueryParams())),
         ]);
 
-        if ( $response->getStatusCode() >= 400 )
-        {
+        if ($response->getStatusCode() >= 400) {
             throw new \Exception('Unable to process POI query');
         }
 
@@ -29,8 +28,8 @@ class HttpClient
     }
 
     /**
-     * Get the underlying Guzzle client
-     * 
+     * Get the underlying Guzzle client.
+     *
      * @return  GuzzleHttp\Client
      */
     protected function httpClient()
@@ -45,8 +44,8 @@ class HttpClient
     }
 
     /**
-     * Get the base URI
-     * 
+     * Get the base URI.
+     *
      * @return  string
      */
     public function baseUri()
@@ -55,8 +54,8 @@ class HttpClient
     }
 
     /**
-     * Return some default values to be merged into the headers
-     * 
+     * Return some default values to be merged into the headers.
+     *
      * @return  array
      */
     public function defaultHeaders()
@@ -65,13 +64,12 @@ class HttpClient
     }
 
     /**
-     * Return some default values to be merged into the query parameters
-     * 
+     * Return some default values to be merged into the query parameters.
+     *
      * @return  array
      */
     public function defaultQueryParams()
     {
         return [];
     }
-    
 }
