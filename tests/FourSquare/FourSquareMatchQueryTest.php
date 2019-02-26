@@ -1,8 +1,9 @@
 <?php
 
-namespace TeamZac\POI\Tests\Yelp;
+namespace TeamZac\POI\Tests\FourSquare;
 
 use TeamZac\POI\Facades\POI;
+use TeamZac\POI\Support\LatLng;
 use TeamZac\POI\Tests\TestCase;
 use TeamZac\POI\Support\Address;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -10,17 +11,14 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use TeamZac\POI\Exceptions\InsufficientAddressException;
 
-class YelpMatchQueryTest extends TestCase
+class FourSquareMatchQueryTest extends TestCase
 {
     /** @test */
-    function a_full_address_is_required_by_yelp()
+    function a_latlng_or_street_is_required_by_foursquare()
     {
         $attributes = [
             'street' => '123 Main Street',
-            'city' => 'Fort Worth',
-            'state' => 'Texas',
-            'postalCode' => 76102,
-            'country' => 'US',
+            'latLng' => LatLng::make(32, -97),
         ];
 
         foreach ($attributes as $key => $value) {
@@ -31,7 +29,7 @@ class YelpMatchQueryTest extends TestCase
             $this->assertFalse($address->validate([$key]));
 
             try {
-                POI::driver('yelp')->match('asdf')->near($address);
+                POI::driver('foursquare')->match('asdf')->near($address);
             } catch (InsufficientAddressException $e) {
                 continue;
             }

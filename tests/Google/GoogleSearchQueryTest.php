@@ -1,5 +1,7 @@
 <?php
 
+namespace TeamZac\POI\Tests\Google;
+
 use TeamZac\POI\Facades\POI;
 use TeamZac\POI\Tests\TestCase;
 use TeamZac\POI\Support\Address;
@@ -8,17 +10,17 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use TeamZac\POI\Exceptions\InsufficientAddressException;
 
-class MatchQueryTest extends TestCase
+class GoogleSearchQueryTest extends TestCase
 {
     /** @test */
     function lat_lng_are_required()
     {
-        $query = POI::driver('google')->match('asdf')
-            ->near(Address::make());
+        $address = Address::make();
+        $this->assertFalse($address->hasLatLng());
 
         try {
-            $query->get();
-        } catch (InsufficientAddressException $e) {
+            POI::driver('google')->search('asdf')->near($address);
+        } catch (\Exception $e) {
             return;
         }
 

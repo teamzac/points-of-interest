@@ -3,10 +3,9 @@
 namespace TeamZac\POI\Tests;
 
 use TeamZac\POI\Facades\POI;
-use Orchestra\Testbench\TestCase as BaseTest;
 use TeamZac\POI\PointsOfInterestServiceProvider;
 
-class TestCase extends BaseTest
+class TestCase extends \Orchestra\Testbench\TestCase
 {
     protected function getPackageProviders($app)
     {
