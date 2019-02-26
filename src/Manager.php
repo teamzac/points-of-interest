@@ -35,6 +35,15 @@ class Manager extends BaseManager
     {
         return new Drivers\Here\HereDriver($this->app['config']['points-of-interest.connections.here']);
     }
+    /**
+     * Create an instance of the specified driver
+     * 
+     * @return  FourSquareDriver
+     */
+    protected function createFourSquareDriver()
+    {
+        return new Drivers\FourSquare\FourSquareDriver($this->app['config']['points-of-interest.connections.foursquare']);
+    }
 
     /**
      * Get the default driver name.

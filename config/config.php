@@ -16,5 +16,10 @@ return [
             'app_id' => env('HERE_APP_ID'),
             'key' => env('HERE_APP_CODE'),
         ],
+
+        'foursquare' => [
+            'app_id' => env('FOURSQUARE_CLIENT_ID'),
+            'key' => env('FOURSQUARE_CLIENT_SECRET'),
+        ],
     ]
 ];
