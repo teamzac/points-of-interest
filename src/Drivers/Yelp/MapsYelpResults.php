@@ -36,6 +36,12 @@ trait MapsYelpResults
             'categories' => collect(Arr::get($result, 'categories', []))->map(function ($category) {
                 return $category['alias'];
             })->toArray(),
+            'extra' => [
+                'price' => Arr::get($result, 'price'),
+                'rating' => Arr::get($result, 'rating'),
+                'review_count' => Arr::get($result, 'review_count'),
+                'url' => Arr::get($result, 'url'),
+            ],
         ]);
     }
 }
