@@ -4,6 +4,7 @@ namespace TeamZac\POI\Drivers\Here;
 
 use Illuminate\Support\Arr;
 use TeamZac\POI\Support\Address;
+use TeamZac\POI\Support\BoundingBox;
 use TeamZac\POI\Support\PlaceCollection;
 use TeamZac\POI\Contracts\SearchQueryInterface;
 use TeamZac\POI\Exceptions\InsufficientAddressException;
@@ -20,7 +21,9 @@ class SearchQuery implements SearchQueryInterface
 
     /** @var array */
     protected $query = [
+        'size' => 100,
         'show_refs' => 'facebook,yelp,opentable',
+        'cat' => 'eat-drink,going-out,shopping,petrol-station,amusement-holiday-park',
     ];
 
     public function __construct($client)
@@ -46,6 +49,7 @@ class SearchQuery implements SearchQueryInterface
         }
 
         $this->query['at'] = $address->latLng->getDescription();
+        unset($this->query['in']);
 
         return $this;
     }
@@ -55,6 +59,18 @@ class SearchQuery implements SearchQueryInterface
      */
     public function within($geometry)
     {
+        if ($geometry instanceof BoundingBox) {
+            $coordinates = [
+                $geometry->sw()->getLng(),
+                $geometry->sw()->getLat(),
+                $geometry->ne()->getLng(),
+                $geometry->ne()->getLat(),
+            ];
+        }
+
+        $this->query['in'] = implode(',', $coordinates);
+        unset($this->query['at']);
+
         return $this;
     }
 
