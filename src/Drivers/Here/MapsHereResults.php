@@ -30,12 +30,17 @@ trait MapsHereResults
             ]),
             'phone' => str_replace('+', '', Arr::get($result, 'contacts.phone.0.value')),
             'categories' => $this->mergeCategoriesAndTags($result),
-            'references' => collect(Arr::get($result, 'references'))->map(function ($reference, $key) {
-                return [
-                    'service' => $key,
-                    'id' => $reference['id'],
-                ];
-            })->values()->toArray(),
+            'extra' => [
+                'chain' => collect(Arr::get($result, 'chains.0.id'))->first(),
+                'hours' => Arr::get($result, 'extended.openingHours.text'),
+                'alternativeNames' => collect(Arr::get($result, 'alternativeNames'))->pluck('name')->toArray(),
+                'references' => collect(Arr::get($result, 'references'))->map(function ($reference, $key) {
+                    return [
+                        'service' => $key,
+                        'id' => $reference['id'],
+                    ];
+                })->values()->toArray(),
+            ],
         ]);
     }
 

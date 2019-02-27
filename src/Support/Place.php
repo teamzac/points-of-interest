@@ -23,7 +23,7 @@ class Place
     protected $categories = [];
 
     /** @var array */
-    protected $references = [];
+    protected $extra = [];
 
     /** @var array */
     protected $raw;
@@ -89,13 +89,13 @@ class Place
     }
 
     /**
-     * Get the references for this place.
+     * Get extra data provided for this place.
      *
      * @return  array
      */
-    public function getReferences()
+    public function getExtra()
     {
-        return $this->references;
+        return $this->extra;
     }
 
     /**
