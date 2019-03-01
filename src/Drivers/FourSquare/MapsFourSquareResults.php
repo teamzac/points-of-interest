@@ -35,6 +35,19 @@ trait MapsFourSquareResults
             'categories' => collect(Arr::get($result, 'categories', []))->map(function ($category) {
                 return Str::slug(Arr::get($category, 'shortName'));
             })->toArray(),
+            'extra' => [
+                'url' => Arr::get($result, 'url'),
+                'hereNow' => Arr::get($result, 'hereNow.count', 0),
+                'pageUrl' => Arr::get($result, 'canonical_url'),
+                'verified' => !! Arr::get($result, 'verified'),
+                'rating' => Arr::get($result, 'rating'),
+                'likes' => Arr::get($result, 'likes.count'),
+                'price' => [
+                    'symbol' => Arr::get($result, 'price.currency'),
+                    'description' => Arr::get($result, 'price.message'),
+                ],
+                'hours' => Arr::get($result, 'hours.timeframes'),
+            ],
         ]);
     }
 }
