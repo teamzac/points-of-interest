@@ -107,7 +107,6 @@ class MatchQuery implements MatchQueryInterface
         );
 
         $json = $this->client->get('findplacefromtext/json', $this->query);
-        dd($json);
 
         return $this->mapResultToPlace(Arr::get($json, 'candidates', [])[0]);
     }
