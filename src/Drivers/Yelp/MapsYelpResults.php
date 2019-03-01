@@ -37,11 +37,29 @@ trait MapsYelpResults
                 return $category['alias'];
             })->toArray(),
             'extra' => [
-                'price' => Arr::get($result, 'price'),
+                // url
+                'pageUrl' => Arr::get($result, 'url'),
+                // herenow does not exist
+                'is_claimed' => !! Arr::get($result, 'is_claimed'),
                 'rating' => Arr::get($result, 'rating'),
                 'review_count' => Arr::get($result, 'review_count'),
-                'url' => Arr::get($result, 'url'),
+                'price' => [
+                    'symbol' => $symbol = Arr::get($result, 'price'),
+                    'description' => $this->getPriceDescription($symbol),
+                ],
+                'hours' => Arr::get($result, 'hours', []),
             ],
         ]);
+    }
+
+    protected function getPriceDescription($symbol) 
+    {
+        $map = [
+            '$'     => 'Cheap',
+            '$$'    => 'Moderate',
+            '$$$'   => 'Pricey',
+            '$$$$'  => 'Expensive',
+        ];
+        return Arr::get($map, $symbol, '');
     }
 }
