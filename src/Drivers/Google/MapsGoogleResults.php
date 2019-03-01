@@ -35,7 +35,7 @@ trait MapsGoogleResults
                 'rating' => Arr::get($result, 'rating'),
                 'rating_count' => Arr::get($result, 'user_ratings_total'),
                 'hours' => Arr::get($result, 'opening_hours', null),
-            ]
+            ],
         ]);
     }
 }
