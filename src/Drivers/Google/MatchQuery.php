@@ -20,6 +20,12 @@ class MatchQuery implements MatchQueryInterface
         'fields' => 'id,name,place_id,geometry/location,formatted_address,permanently_closed,photos,types',
     ];
 
+    /** @var TeamZac\POI\Support\Point */
+    protected $latLng;
+
+    /** @var int */
+    protected $radius = 250;
+
     /**
      * Construct the query.
      *
@@ -59,13 +65,23 @@ class MatchQuery implements MatchQueryInterface
     /**
      * {@inheritdoc}
      */
-    public function near(Address $address, $radiusInMeters = null)
+    public function near(Address $address)
     {
         if (! $address->hasLatLng()) {
             throw new InsufficientAddressException('Google requires a lat/lng pair for this query');
         }
 
-        $this->query['locationbias'] = sprintf('point:%s,%s', $address->latLng->getLat(), $address->latLng->getLng());
+        $this->latLng = $address->latLng;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function radius($radiusInMeters)
+    {
+        $this->radius = $radiusInMeters;
 
         return $this;
     }
@@ -83,6 +99,13 @@ class MatchQuery implements MatchQueryInterface
      */
     public function get()
     {
+        $this->query['locationbias'] = sprintf(
+            'circle:%s:%s,%s', 
+            $this->radius,
+            $address->latLng->getLat(), 
+            $address->latLng->getLng()
+        );
+
         $json = $this->client->get('findplacefromtext/json', $this->query);
 
         return $this->mapResultToPlace(Arr::get($json, 'candidates', [])[0]);
