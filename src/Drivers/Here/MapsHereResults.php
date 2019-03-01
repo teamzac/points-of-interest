@@ -57,6 +57,13 @@ trait MapsHereResults
      */
     protected function getChain($result)
     {
+        if ($firstChainId = Arr::get($result, 'chainIds.0')) {
+            return [
+                'id' => $firstChainId,
+                'name' => null,
+            ];
+        }
+
         return collect(Arr::get($result, 'chains'))->map(function($chain) {
             return [
                 'id' => $chain['id'],
