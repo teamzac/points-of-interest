@@ -100,13 +100,14 @@ class MatchQuery implements MatchQueryInterface
     public function get()
     {
         $this->query['locationbias'] = sprintf(
-            'circle:%s:%s,%s', 
+            'circle:%s@%s,%s', 
             $this->radius,
             $this->latLng->getLat(), 
             $this->latLng->getLng()
         );
 
         $json = $this->client->get('findplacefromtext/json', $this->query);
+        dd($json);
 
         return $this->mapResultToPlace(Arr::get($json, 'candidates', [])[0]);
     }
