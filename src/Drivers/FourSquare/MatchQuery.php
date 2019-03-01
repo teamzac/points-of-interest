@@ -64,10 +64,9 @@ class MatchQuery implements MatchQueryInterface
     public function radius($radiusInMeters)
     {
         $this->query['radius'] = $radius;
+
         return $this;
     }
-
-
 
     /**
      * {@inheritdoc}

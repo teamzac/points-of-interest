@@ -2,8 +2,6 @@
 
 namespace TeamZac\POI\Support;
 
-use TeamZac\POI\Support\LatLng;
-
 class BoundingBox
 {
     /** @var LatLng */
@@ -18,17 +16,17 @@ class BoundingBox
     /** @var LatLng */
     protected $sw;
 
-    public static function fromNorthWest($nw, $se) 
+    public static function fromNorthWest($nw, $se)
     {
         return (new static)->setNorthWest($nw)->setSouthEast($se);
     }
 
-    public static function fromNorthEast($ne, $sw) 
+    public static function fromNorthEast($ne, $sw)
     {
         return (new static)->setNorthEast($ne)->setSouthWest($sw);
     }
 
-    public static function fromSouthWest($sw, $ne) 
+    public static function fromSouthWest($sw, $ne)
     {
         return (new static)->setSouthWest($sw)->setNorthEast($ne);
     }
@@ -39,9 +37,10 @@ class BoundingBox
      * @param   LatLng $nw
      * @return  $this
      */
-    public function setNorthWest($nw) 
+    public function setNorthWest($nw)
     {
         $this->nw = $nw;
+
         return $this;
     }
 
@@ -51,9 +50,10 @@ class BoundingBox
      * @param   LatLng $ne
      * @return  $this
      */
-    public function setNorthEast($ne) 
+    public function setNorthEast($ne)
     {
         $this->ne = $ne;
+
         return $this;
     }
 
@@ -63,9 +63,10 @@ class BoundingBox
      * @param   LatLng $se
      * @return  $this
      */
-    public function setSouthEast($se) 
+    public function setSouthEast($se)
     {
         $this->se = $se;
+
         return $this;
     }
 
@@ -75,15 +76,16 @@ class BoundingBox
      * @param   LatLng $sw
      * @return  $this
      */
-    public function setSouthWest($sw) 
+    public function setSouthWest($sw)
     {
         $this->sw = $sw;
+
         return $this;
     }
 
     /**
      * Get the northwest corner.
-     * 
+     *
      * @return  LatLng
      */
     public function nw()
@@ -98,7 +100,7 @@ class BoundingBox
 
     /**
      * Get the southeast corner.
-     * 
+     *
      * @return  LatLng
      */
     public function se()
@@ -113,7 +115,7 @@ class BoundingBox
 
     /**
      * Get the northeast corner.
-     * 
+     *
      * @return  LatLng
      */
     public function ne()
@@ -128,7 +130,7 @@ class BoundingBox
 
     /**
      * Get the southwest corner.
-     * 
+     *
      * @return  LatLng
      */
     public function sw()
@@ -143,7 +145,7 @@ class BoundingBox
 
     /**
      * Validate that the given corners are not null.
-     * 
+     *
      * @param   LatLng
      * @throws  Exception
      */

@@ -9,7 +9,7 @@ use TeamZac\POI\Support\BoundingBox;
 class BoundingBoxTest extends TestCase
 {
     /** @test */
-    function it_provides_nw_and_se_corners()
+    public function it_provides_nw_and_se_corners()
     {
         $sw = LatLng::make(0, 0);
         $ne = LatLng::make(5, 5);
@@ -27,7 +27,7 @@ class BoundingBoxTest extends TestCase
     }
 
     /** @test */
-    function it_provides_ne_and_sw_corners()
+    public function it_provides_ne_and_sw_corners()
     {
         // $sw = LatLng::make(0, 0);
         // $ne = LatLng::make(5, 5);
@@ -45,7 +45,7 @@ class BoundingBoxTest extends TestCase
     }
 
     /** @test */
-    function an_exception_is_thrown_if_not_enough_information_is_provided()
+    public function an_exception_is_thrown_if_not_enough_information_is_provided()
     {
         $box = new BoundingBox;
 

@@ -40,7 +40,7 @@ trait MapsYelpResults
                 // url
                 'pageUrl' => Arr::get($result, 'url'),
                 // herenow does not exist
-                'is_claimed' => !! Arr::get($result, 'is_claimed'),
+                'is_claimed' => (bool) Arr::get($result, 'is_claimed'),
                 'rating' => Arr::get($result, 'rating'),
                 'review_count' => Arr::get($result, 'review_count'),
                 'price' => [
@@ -52,7 +52,7 @@ trait MapsYelpResults
         ]);
     }
 
-    protected function getPriceDescription($symbol) 
+    protected function getPriceDescription($symbol)
     {
         $map = [
             '$'     => 'Cheap',
@@ -60,6 +60,7 @@ trait MapsYelpResults
             '$$$'   => 'Pricey',
             '$$$$'  => 'Expensive',
         ];
+
         return Arr::get($map, $symbol, '');
     }
 }

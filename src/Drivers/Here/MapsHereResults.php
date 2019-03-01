@@ -50,8 +50,8 @@ trait MapsHereResults
     }
 
     /**
-     * Get the chain if it exists
-     * 
+     * Get the chain if it exists.
+     *
      * @param   $result
      * @return  array|null
      */
@@ -64,7 +64,7 @@ trait MapsHereResults
             ];
         }
 
-        return collect(Arr::get($result, 'chains'))->map(function($chain) {
+        return collect(Arr::get($result, 'chains'))->map(function ($chain) {
             return [
                 'id' => $chain['id'],
                 'name' => Arr::get($chain, 'names.0.name'),

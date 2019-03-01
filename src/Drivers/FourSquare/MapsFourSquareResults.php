@@ -40,7 +40,7 @@ trait MapsFourSquareResults
                 'url' => Arr::get($result, 'url'),
                 'pageUrl' => Arr::get($result, 'canonical_url'),
                 'hereNow' => Arr::get($result, 'hereNow.count', 0),
-                'verified' => !! Arr::get($result, 'verified'),
+                'verified' => (bool) Arr::get($result, 'verified'),
                 'rating' => Arr::get($result, 'rating'),
                 'likes' => Arr::get($result, 'likes.count'),
                 'price' => [
@@ -52,16 +52,16 @@ trait MapsFourSquareResults
         ]);
     }
 
-    /** 
-     * Return the chain information if it exists
+    /**
+     * Return the chain information if it exists.
      *
      * @param $result
      * @return array|null
      */
     protected function getChain($result)
     {
-        if (!$pageUser = Arr::get($result, 'page.user')) {
-            return null;
+        if (! $pageUser = Arr::get($result, 'page.user')) {
+            return;
         }
 
         if ($pageUser['type'] == 'chain') {

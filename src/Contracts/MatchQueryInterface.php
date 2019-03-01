@@ -31,9 +31,9 @@ interface MatchQueryInterface
      */
     public function near(Address $address);
 
-    /** 
-     * Set the search radius in meters
-     * 
+    /**
+     * Set the search radius in meters.
+     *
      * @param   int $radiusInMeters
      * @return  $this
      */
