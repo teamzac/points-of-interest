@@ -23,6 +23,11 @@ trait MapsHereResults
                 'formatted' => str_replace(
                     '<br/>', ', ', $this->findValueWithFallback($result, 'location.address.text', 'vicinity')
                 ),
+                'street' => Arr::get($result, 'location.address.street'),
+                'city' => Arr::get($result, 'location.address.city'),
+                'state' => Arr::get($result, 'location.address.stateCode'),
+                'postalCode' => Arr::get($result, 'location.address.postalCode'),
+                'country' => Arr::get($result, 'location.address.countryCode'),
                 'latLng' => LatLng::make(
                     $this->findValueWithFallback($result, 'location.position.0', 'position.0'),
                     $this->findValueWithFallback($result, 'location.position.1', 'position.1')
@@ -31,7 +36,7 @@ trait MapsHereResults
             'phone' => str_replace('+', '', Arr::get($result, 'contacts.phone.0.value')),
             'categories' => $this->mergeCategoriesAndTags($result),
             'extra' => [
-                'chain' => collect(Arr::get($result, 'chains.0.id'))->first(),
+                'chain' => $this->getChain($result),
                 'hours' => Arr::get($result, 'extended.openingHours.text'),
                 'alternativeNames' => collect(Arr::get($result, 'alternativeNames'))->pluck('name')->toArray(),
                 'references' => collect(Arr::get($result, 'references'))->map(function ($reference, $key) {
@@ -42,6 +47,22 @@ trait MapsHereResults
                 })->values()->toArray(),
             ],
         ]);
+    }
+
+    /**
+     * Get the chain if it exists
+     * 
+     * @param   $result
+     * @return  array|null
+     */
+    protected function getChain($result)
+    {
+        return collect(Arr::get($result, 'chains'))->map(function($chain) {
+            return [
+                'id' => $chain['id'],
+                'name' => Arr::get($chain, 'names.0.name'),
+            ];
+        })->first();
     }
 
     /**

@@ -36,9 +36,10 @@ trait MapsFourSquareResults
                 return Str::slug(Arr::get($category, 'shortName'));
             })->toArray(),
             'extra' => [
+                'chain' => $this->getChain($result),
                 'url' => Arr::get($result, 'url'),
-                'hereNow' => Arr::get($result, 'hereNow.count', 0),
                 'pageUrl' => Arr::get($result, 'canonical_url'),
+                'hereNow' => Arr::get($result, 'hereNow.count', 0),
                 'verified' => !! Arr::get($result, 'verified'),
                 'rating' => Arr::get($result, 'rating'),
                 'likes' => Arr::get($result, 'likes.count'),
@@ -49,5 +50,25 @@ trait MapsFourSquareResults
                 'hours' => Arr::get($result, 'hours.timeframes'),
             ],
         ]);
+    }
+
+    /** 
+     * Return the chain information if it exists
+     *
+     * @param $result
+     * @return array|null
+     */
+    protected function getChain($result)
+    {
+        if (!$pageUser = Arr::get($result, 'page.user')) {
+            return null;
+        }
+
+        if ($pageUser['type'] == 'chain') {
+            return [
+                'id' => $pageUser['id'],
+                'name' => $pageUser['firstName'],
+            ];
+        }
     }
 }

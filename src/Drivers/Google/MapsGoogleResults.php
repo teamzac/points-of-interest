@@ -26,6 +26,16 @@ trait MapsGoogleResults
                 ),
             ]),
             'categories' => Arr::get($result, 'types', []),
+            'phone' => Arr::get($result, 'formatted_phone_number'),
+            'extra' => [
+                // url
+                'pageUrl' => Arr::get($result, 'url'),
+                // here now
+                // verified
+                'rating' => Arr::get($result, 'rating'),
+                'rating_count' => Arr::get($result, 'user_ratings_total'),
+                'hours' => Arr::get($result, 'opening_hours', null),
+            ]
         ]);
     }
 }

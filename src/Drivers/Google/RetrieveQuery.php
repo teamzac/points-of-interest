@@ -24,7 +24,7 @@ class RetrieveQuery implements RetrieveQueryInterface
     {
         $json = $this->client->get('details/json', [
             'placeid' => $id,
-            'fields' => 'id,name,place_id,geometry/location,formatted_address,permanently_closed,types',
+            'fields' => 'id,name,place_id,geometry/location,formatted_address,permanently_closed,types,url,scope,user_ratings_total,vicinity',
         ]);
 
         return $this->mapResultToPlace(Arr::get($json, 'result', []));
