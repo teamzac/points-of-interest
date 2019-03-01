@@ -46,7 +46,7 @@ class MatchQuery implements MatchQueryInterface
     /**
      * {@inheritdoc}
      */
-    public function near(Address $address)
+    public function near(Address $address, $radiusInMeters = null)
     {
         if (! $address->hasLatLng() || ! $address->validate(['street'])) {
             throw new InsufficientAddressException('FourSquare requires a lat/lng pair and/or street number for this query');

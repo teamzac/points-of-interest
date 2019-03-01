@@ -26,10 +26,11 @@ interface MatchQueryInterface
      * Search near a given address.
      *
      * @param   Address $address
+     * @param   int $radiusInMeters
      * @throws  InsufficientAddressException
      * @return  $this
      */
-    public function near(Address $address);
+    public function near(Address $address, $radiusInMeters = null);
 
     /**
      * Search within a given boundary.

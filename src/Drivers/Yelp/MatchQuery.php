@@ -50,7 +50,7 @@ class MatchQuery implements MatchQueryInterface
     /**
      * {@inheritdoc}
      */
-    public function near(Address $address)
+    public function near(Address $address, $radiusInMeters = null)
     {
         if (! $address->validate(['street', 'city', 'state', 'country', 'postalCode'])) {
             throw new InsufficientAddressException('Yelp requires a street, city, state, country, and postal code for this query');

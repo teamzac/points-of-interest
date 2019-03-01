@@ -48,7 +48,7 @@ class MatchQuery implements MatchQueryInterface
     /**
      * {@inheritdoc}
      */
-    public function near(Address $address)
+    public function near(Address $address, $radiusInMeters = null)
     {
         if (! $address->hasLatLng()) {
             throw new InsufficientAddressException('Here requires a lat/lng pair for this query');
