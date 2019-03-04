@@ -26,7 +26,7 @@ trait MapsFourSquareResults
                 'state' => Arr::get($result, 'location.state'),
                 'postalCode' => Arr::get($result, 'location.postalCode'),
                 'country' => Arr::get($result, 'location.country'),
-                'formatted' => implode(', ', Arr::get($result, 'location.formattedAddress')),
+                'formatted' => implode(', ', Arr::get($result, 'location.formattedAddress', [])),
                 'latLng' => new LatLng(
                     Arr::get($result, 'location.lat'), Arr::get($result, 'location.lng')
                 ),

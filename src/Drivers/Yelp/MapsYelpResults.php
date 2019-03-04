@@ -27,7 +27,7 @@ trait MapsYelpResults
                 'state' => Arr::get($result, 'location.state'),
                 'postalCode' => Arr::get($result, 'location.zip_code'),
                 'country' => Arr::get($result, 'location.country'),
-                'formatted' => implode(', ', Arr::get($result, 'location.display_address')),
+                'formatted' => implode(', ', Arr::get($result, 'location.display_address', [])),
                 'latLng' => new LatLng(
                     Arr::get($result, 'coordinates.latitude'), Arr::get($result, 'coordinates.longitude')
                 ),
