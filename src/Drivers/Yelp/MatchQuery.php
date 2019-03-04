@@ -90,6 +90,6 @@ class MatchQuery implements MatchQueryInterface
     {
         $json = $this->client->get('matches', $this->query);
 
-        return $this->mapResultToPlace($json['businesses'][0]);
+        return $this->mapResultToPlace(Arr::get($json, 'businesses.0'));
     }
 }
