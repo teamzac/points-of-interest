@@ -2,6 +2,7 @@
 
 namespace TeamZac\POI\Drivers\Yelp;
 
+use Illuminate\Support\Arr;
 use TeamZac\POI\Support\Address;
 use TeamZac\POI\Contracts\MatchQueryInterface;
 use TeamZac\POI\Exceptions\InsufficientAddressException;
