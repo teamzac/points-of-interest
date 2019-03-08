@@ -88,6 +88,6 @@ class SearchQuery implements SearchQueryInterface
      */
     public function fromCursor($cursor)
     {
-        return $this;
+        return PlaceCollection::make([])->setProvider('foursquare');
     }
 }
