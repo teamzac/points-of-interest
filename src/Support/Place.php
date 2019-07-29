@@ -39,6 +39,16 @@ class Place
     }
 
     /**
+     * Does this place represent an empty result?
+     * 
+     * @return  bool
+     */
+    public function isEmpty()
+    {
+        return is_null($this->id);
+    }
+
+    /**
      * Get the remote ID associated with this place.
      *
      * @return  string
