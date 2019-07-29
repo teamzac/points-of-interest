@@ -1,11 +1,9 @@
 # Search for points of interest
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/teamzac/points-of-interest.svg?style=flat-square)](https://packagist.org/packages/teamzac/points-of-interest)
-[![Build Status](https://img.shields.io/travis/teamzac/points-of-interest/master.svg?style=flat-square)](https://travis-ci.org/teamzac/points-of-interest)
-[![Quality Score](https://img.shields.io/scrutinizer/g/teamzac/points-of-interest.svg?style=flat-square)](https://scrutinizer-ci.com/g/teamzac/points-of-interest)
 [![Total Downloads](https://img.shields.io/packagist/dt/teamzac/points-of-interest.svg?style=flat-square)](https://packagist.org/packages/teamzac/points-of-interest)
 
-A package, which includes Laravel support, for searching multiple providers of point-of-interest (POI) data. Currently includes support for Google, and Yelp.
+A package, which includes Laravel support, for searching multiple providers of point-of-interest (POI) data. Currently includes support for Google, Yelp, FourSquare, and Here.com.
 
 ## Installation
 
@@ -69,7 +67,6 @@ $place = POI::driver('yelp')->retrieve('provider-id');
 
 Unlike the other two queries, the retrieve query directly returns an instance of ```TeamZac\POI\Support\Place```.
 
-
 ### Matching based on known attributes
 
 If you have some known attributes for a POI and would like to retrieve a matching copy from a specific provider, you should use the match query.
@@ -117,7 +114,7 @@ We've done our best to provide a standardized interface across all platforms, ev
 
 #### Searching near a location
 
-To search near a specific address or location, you can use the ```near()``` method, which accepts and instance of ```TeamZac\POI\Support\Address```. Address is a value object that holds information about a street address, including the street name/number, city, state, country, postal code, and latitude/longitude pair (which should be an instance of ```TeamZac\POI\Support\LatLng```.
+To search near a specific address or location, you can use the ```near()``` method, which accepts an instance of ```TeamZac\POI\Support\Address```. Address is a value object that holds information about a street address, including the street name/number, city, state, country, postal code, and latitude/longitude pair (which should be an instance of ```TeamZac\POI\Support\LatLng```).
 
 
 ``` php
@@ -156,8 +153,6 @@ $query->categories(['retail', 'restaurant']);
 ```
 
 We provide a generic set of categories that each provider is responsible for mapping to its own specific category codes. For more information, go here. **TODO: add something about this**
-
-
 
 The following providers support searching within arbitrary polygons:
 
@@ -262,7 +257,6 @@ The ```get()``` method should return an instance of ```TeamZac\POI\Support\Place
 The ```retrieve()``` method accepts an ID and returns an instance of ```TeamZac\POI\Support\Place```.
 
 
-
 ### Testing
 
 ``` bash
@@ -285,11 +279,8 @@ If you discover any security related issues, please email chad@zactax.com instea
 
 - [Chad Janicek](https://github.com/teamzac)
 - [All Contributors](../../contributors)
+- [Laravel Package Boilerplate](https://laravelpackageboilerplate.com)
 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-## Laravel Package Boilerplate
-
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).
