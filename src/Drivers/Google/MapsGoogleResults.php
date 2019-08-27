@@ -20,7 +20,7 @@ trait MapsGoogleResults
             'id' => Arr::get($result, 'place_id'),
             'name' => Arr::get($result, 'name'),
             'address' => new Address([
-                'formatted' => Arr::get($result, 'formatted_address'),
+                'formatted' => Arr::get($result, 'formatted_address') ?? Arr::get($result, 'vicinity'),
                 'latLng' => new LatLng(
                     Arr::get($result, 'geometry.location.lat'), Arr::get($result, 'geometry.location.lng')
                 ),
