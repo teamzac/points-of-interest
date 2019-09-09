@@ -2,6 +2,8 @@
 
 namespace TeamZac\POI\Support;
 
+use Illuminate\Support\Arr;
+
 class Address
 {
     /** @var array */
@@ -23,7 +25,7 @@ class Address
      */
     public function __get($key)
     {
-        return array_get($this->attributes, $key, null);
+        return Arr::get($this->attributes, $key, null);
     }
 
     /**
