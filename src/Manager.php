@@ -13,7 +13,7 @@ class Manager extends BaseManager
      */
     protected function createGoogleDriver()
     {
-        return new Drivers\Google\GoogleDriver($this->app['config']['points-of-interest.connections.google']);
+        return new Drivers\Google\GoogleDriver($this->container['config']['points-of-interest.connections.google']);
     }
 
     /**
@@ -23,7 +23,7 @@ class Manager extends BaseManager
      */
     protected function createYelpDriver()
     {
-        return new Drivers\Yelp\YelpDriver($this->app['config']['points-of-interest.connections.yelp']);
+        return new Drivers\Yelp\YelpDriver($this->container['config']['points-of-interest.connections.yelp']);
     }
 
     /**
@@ -33,7 +33,7 @@ class Manager extends BaseManager
      */
     protected function createHereDriver()
     {
-        return new Drivers\Here\HereDriver($this->app['config']['points-of-interest.connections.here']);
+        return new Drivers\Here\HereDriver($this->container['config']['points-of-interest.connections.here']);
     }
 
     /**
@@ -43,7 +43,7 @@ class Manager extends BaseManager
      */
     protected function createFourSquareDriver()
     {
-        return new Drivers\FourSquare\FourSquareDriver($this->app['config']['points-of-interest.connections.foursquare']);
+        return new Drivers\FourSquare\FourSquareDriver($this->container['config']['points-of-interest.connections.foursquare']);
     }
 
     /**
@@ -53,6 +53,6 @@ class Manager extends BaseManager
      */
     public function getDefaultDriver()
     {
-        return $this->app['config']['points-of-interest.default'];
+        return $this->container['config']['points-of-interest.default'];
     }
 }
