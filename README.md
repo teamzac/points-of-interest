@@ -1,7 +1,6 @@
 # Search for points of interest
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/teamzac/points-of-interest.svg?style=flat-square)](https://packagist.org/packages/teamzac/points-of-interest)
-[![Total Downloads](https://img.shields.io/packagist/dt/teamzac/points-of-interest.svg?style=flat-square)](https://packagist.org/packages/teamzac/points-of-interest)
 
 A package, which includes Laravel support, for searching multiple providers of point-of-interest (POI) data. Currently includes support for Google, Yelp, FourSquare, and Here.com.
 
@@ -13,7 +12,7 @@ You can install the package via composer:
 composer require teamzac/points-of-interest
 ```
 
-Once installed, Laravel 5.5+ will auto-discover the package. If you do not, or cannot, use auto-discovery, you may manually install by adding the following to ```config/app.php```:
+Once installed, Laravel 8+ will auto-discover the package. If you do not, or cannot, use auto-discovery, you may manually install by adding the following to ```config/app.php```:
 
 ``` php
     // providers
